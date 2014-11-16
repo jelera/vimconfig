@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Mon 03 Nov 2014 12:06:09 PM CST
+" Last Updated: Mon 10 Nov 2014 03:50:15 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -215,6 +215,7 @@ NeoBundle 'Shougo/neocomplete.vim' " {{{
 " Colorschemes   {{{
 "------------------+
 NeoBundle 'git@github.com:jelera/vim-hybrid.git'
+NeoBundle 'chriskempson/base16-vim'
 "}}}
 
 "------------------+
@@ -492,7 +493,7 @@ let &colorcolumn=join(range(81,999),",")
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 "}}}
 
-colorscheme hybrid-light
+colorscheme hybrid
 
 if has('gui_running')
 " GVIM / MacVim"{{{
@@ -782,18 +783,14 @@ iab llorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eius
 augroup Code Comments             "{{{
 "------------------------------------+
 	" Horizontal Rule (78 char long)
-	autocmd FileType vim                           map <leader>hr 0i"----------------------------------------------------------------------------//<ESC>
-	autocmd FileType javascript,php,c,cpp,css      map <leader>hr 0i/**--------------------------------------------------------------------------*/<ESC>
-	autocmd FileType python,perl,ruby,sh,zsh,conf  map <leader>hr 0i#----------------------------------------------------------------------------//<ESC>
+	autocmd FileType vim                           map <leader>hr 0i""---------------------------------------------------------------------------//<ESC>
+	autocmd FileType javascript,php,c,cpp,css      map <leader>hr 0i/**-------------------------------------------------------------------------**/<ESC>
+	autocmd FileType python,perl,ruby,sh,zsh,conf  map <leader>hr 0i##---------------------------------------------------------------------------//<ESC>
 	" Comment Banners (adds 5 spaces at each end)
 	autocmd FileType vim                           map <leader>cb I"     <ESC>A     "<ESC>yyp0lv$hhr-yykPjj
 	autocmd FileType python,perl,ruby,sh,zsh,conf  map <leader>cb I#     <ESC>A     #<ESC>yyp0lv$hhr-yykPjj
 	autocmd FileType javascript,php,c,cpp,css      map <leader>cb I/*     <ESC>A     */<ESC>yyp0llv$r-$hc$*/<ESC>yykPjj
 
-	" Headers 'level 2' for code comments (adds 2 spaces)
-	autocmd FileType vim                           map <leader>ccb I"  <ESC>Yplv$r-A--//<ESC>
-	autocmd FileType python,perl,ruby,sh,zsh,conf  map <leader>ccb I#  <ESC>Yplv$r-A--//<ESC>
-	autocmd FileType javascript,php,c,cpp,css      map <leader>ccb I//  <ESC>Yplv$r-A--//<ESC>
 
 augroup END "}}}
 
