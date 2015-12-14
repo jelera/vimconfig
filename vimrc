@@ -852,6 +852,19 @@ augroup Filetype Specific         "{{{
 		au FileType markdown nnoremap <silent> <leader>md :%!markdown 2>/dev/null<CR>
 	endif
 
+	" Preview the generated HTML on the browser
+	if executable('markdown')
+		au FileType markdown nnoremap <silent> <leader>pv :call PreviewMarkdownInBrowser()<CR>
+
+	endif
+	function! PreviewMarkdownInBrowser()
+		if has("mac")
+			exec "!markdown % > /tmp/preview.html && open -a /Applications/Firefox.app/ /tmp/preview.html"
+		else
+			exec "!markdown % > /tmp/preview.html && firefox /tmp/preview.html"
+		endif
+	endfunction
+
 	" Markdown formatting
 	au FileType markdown setlocal autoindent formatoptions=tcroqn2 comments=n:>
 	" }}}
