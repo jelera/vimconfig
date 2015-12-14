@@ -506,7 +506,7 @@ if has('gui_running')
 		set guifont=Meslo\ LG\ L\ DZ\ for\ Powerline\:h9
 	else
 		" For Linux gVim
-		set guifont=Meslo\ LG\ L\ DZ\ for\ Powerline\ 9
+		set guifont=Fura\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Plus\ Font\ Awesome\ Plus\ Octicons\ Plus\ Pomicons\ 10
 endif
 "}}}
 else
