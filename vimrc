@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Mon 10 Nov 2014 03:50:15 PM CST
+" Last Updated: Fri 27 Nov 2015 01:09:50 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -216,6 +216,7 @@ NeoBundle 'Shougo/neocomplete.vim' " {{{
 "------------------+
 NeoBundle 'git@github.com:jelera/vim-hybrid.git'
 NeoBundle 'chriskempson/base16-vim'
+NeoBundle 'NLKNguyen/papercolor-theme'
 "}}}
 
 "------------------+
@@ -483,17 +484,17 @@ set foldtext=FoldText()
 set t_Co=256
 
 " These customizations are for the Hybrid Colorscheme, for my readability {{{
-hi  FoldColumn   guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
-hi  Folded       guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
-hi  LineNr       guifg=#4e4e4e guibg=#000                  ctermfg=237 ctermbg=233
-hi  helpExample  guifg=#5faf00
+" hi  FoldColumn   guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
+" hi  Folded       guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
+" hi  LineNr       guifg=#4e4e4e guibg=#000                  ctermfg=237 ctermbg=233
+" hi  helpExample  guifg=#5faf00
 
 " This piece highlights the border of 80 char"
 let &colorcolumn=join(range(81,999),",")
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 "}}}
 
-colorscheme hybrid
+colorscheme PaperColor
 
 if has('gui_running')
 " GVIM / MacVim"{{{
