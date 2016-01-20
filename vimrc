@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Fri 27 Nov 2015 01:09:50 PM CST
+" Last Updated: Wed 20 Jan 2016 05:44:39 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -506,7 +506,8 @@ if has('gui_running')
 		set guifont=Meslo\ LG\ L\ DZ\ for\ Powerline\:h9
 	else
 		" For Linux gVim
-		set guifont=Fura\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Plus\ Font\ Awesome\ Plus\ Octicons\ Plus\ Pomicons\ 10
+		set guifont=Fura\ Mono\ for\ Powerline\ 10
+		" set guifont=Fura\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Plus\ Font\ Awesome\ Plus\ Octicons\ Plus\ Pomicons\ 10
 endif
 "}}}
 else
