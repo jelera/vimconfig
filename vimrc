@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Wed 20 Jan 2016 05:44:39 PM CST
+" Last Updated: Wed 17 Feb 2016 02:33:57 AM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -68,11 +68,12 @@ NeoBundle 'Shougo/vimproc', {
 "------------------+-----------------+
 " UI/Usability   {{{
 "------------------+
-NeoBundle 'bling/vim-airline' "{{{
+NeoBundle 'vim-airline/vim-airline' "{{{
 	let g:airline_powerline_fonts = 1
 	let g:airline_theme = "tomorrow"
 	let g:airline_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
 "}}}
+NeoBundle 'vim-airline/vim-airline-themes'
 
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-eunuch'
