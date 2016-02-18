@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Wed 17 Feb 2016 02:33:57 AM CST
+" Last Updated: Thu 18 Feb 2016 03:27:00 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -83,6 +83,7 @@ NeoBundle 'mhinz/vim-signify'
 NeoBundle 'mhinz/vim-startify'
 NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'],
 \ 'autoload':{'commands':'Gitv'}}
+NeoBundleLazy 'junegunn/goyo.vim', {'autoload':{'commands':'Goyo'}}
 "}}}
 
 "------------------+
