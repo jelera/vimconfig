@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Thu 18 Feb 2016 03:27:00 PM CST
+" Last Updated: Tue 12 Apr 2016 03:25:16 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -287,11 +287,20 @@ NeoBundle 'majutsushi/tagbar' "{{{
 	"}}}
 
 	" Ruby -------------------{{{
-	NeoBundle 'tpope/vim-rails'
+	NeoBundleLazy 'tpope/vim-rails', {'autoload':{'filetypes':['ruby']}}
 	"}}}
 
 	" Markdown ---------------{{{
-	NeoBundle 'tpope/vim-markdown'
+	NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}
+	"}}}
+
+	" PHP  -------------------{{{
+	NeoBundleLazy 'StanAngeloff/php.vim', {'autoload':{'filetypes':['php']}}
+	NeoBundleLazy 'shawncplus/phpcomplete.vim', {'autoload':{'filetypes':['php']}}
+	"}}}
+
+	" WordPress  -------------{{{
+	NeoBundleLazy 'dsawardekar/wordpress.vim', {'autoload':{'filetypes':['php']}}
 	"}}}
 
 ""}}}
