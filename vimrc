@@ -284,6 +284,7 @@ NeoBundle 'majutsushi/tagbar' "{{{
 	" HTML/XML/CSS -----------{{{
 	NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}}
 	NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
+	NeoBundle 'digitaltoad/vim-pug'
 	"}}}
 
 	" Ruby -------------------{{{
