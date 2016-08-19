@@ -8,14 +8,14 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Tue 12 Apr 2016 03:25:16 PM CDT
+" Last Updated: Fri 19 Aug 2016 12:46:18 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
 "               to experiment with your own mappings, plugins and configs.
 "
 "      License: MIT
-"               Copyright (c) 2014 Jose Elera Campana
+"               Copyright (c) 2016 Jose Elera
 "
 "               Permission is hereby granted, free of charge, to any person
 "               obtaining a copy of this software and associated documentation
@@ -494,19 +494,18 @@ set foldtext=FoldText()
 " Look and Feel settings           {{{
 "------------------------------------+
 set t_Co=256
+colorscheme hybrid
 
 " These customizations are for the Hybrid Colorscheme, for my readability {{{
-" hi  FoldColumn   guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
-" hi  Folded       guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
-" hi  LineNr       guifg=#4e4e4e guibg=#000                  ctermfg=237 ctermbg=233
-" hi  helpExample  guifg=#5faf00
+hi  FoldColumn   guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
+hi  Folded       guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
+hi  LineNr       guifg=#4e4e4e guibg=#000000               ctermfg=237 ctermbg=233
+hi  helpExample  guifg=#5faf00
 
 " This piece highlights the border of 80 char"
 let &colorcolumn=join(range(81,999),",")
 highlight ColorColumn ctermbg=235 guibg=#2c2d27
 "}}}
-
-colorscheme PaperColor
 
 if has('gui_running')
 " GVIM / MacVim"{{{
@@ -515,11 +514,11 @@ if has('gui_running')
 	" Font Selection
 	if has('mac')
 		" For MacVim
-		set guifont=Meslo\ LG\ L\ DZ\ for\ Powerline\:h9
+		set macligatures
+		set guifont=Fira\ Code\ Retina\:h14
 	else
 		" For Linux gVim
-		set guifont=Fura\ Mono\ for\ Powerline\ 10
-		" set guifont=Fura\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Plus\ Font\ Awesome\ Plus\ Octicons\ Plus\ Pomicons\ 10
+		set guifont=Fira\ Code\ 10
 endif
 "}}}
 else
