@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Fri 19 Aug 2016 12:46:18 PM CDT
+" Last Updated: Wed 14 Sep 2016 08:09:43 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -71,9 +71,16 @@ NeoBundle 'Shougo/vimproc', {
 NeoBundle 'vim-airline/vim-airline' "{{{
 	let g:airline_powerline_fonts = 1
 	let g:airline_theme = "tomorrow"
-	let g:airline_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
+	let g:airline_section_c = '%t %{GetFileSize()}'
+	" let g:airline_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
 "}}}
 NeoBundle 'vim-airline/vim-airline-themes'
+NeoBundle 'ctrlpvim/ctrlp.vim'
+let g:ctrlp_custom_ignore = {
+			\ 'dir':  'node_modules$',
+			\ }
+
+
 
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-eunuch'
@@ -276,9 +283,21 @@ NeoBundle 'majutsushi/tagbar' "{{{
 	" JavaScript -------------{{{
 	NeoBundleLazy 'git@github.com:jelera/vim-javascript-syntax.git', {'autoload':{'filetypes':['javascript']}}
 	NeoBundleLazy 'JavaScript-Indent', {'autoload':{'filetypes':['javascript']}}
-	NeoBundleLazy 'marijnh/tern_for_vim', {
-	\ 'autoload': { 'filetypes': ['javascript'] }
+	NeoBundleLazy 'ternjs/tern_for_vim', {
+		\ 'autoload': { 'filetypes': ['javascript'] },
+		\ 'build' : {
+			\ 'mac' : 'npm install',
+			\ 'unix' : 'npm install'
+		\ }
 	\ }
+NeoBundle 'Shougo/vimproc', {
+	\ 'build' : {
+		\ 'windows' : 'make -f make_mingw32.mak',
+		\ 'cygwin' : 'make -f make_cygwin.mak',
+		\ 'mac' : 'make -f make_mac.mak',
+		\ 'unix' : 'make -f make_unix.mak',
+	\ },
+\ }
 	"}}}
 
 	" HTML/XML/CSS -----------{{{
@@ -927,7 +946,14 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	" SASS           {{{
 	"------------------+
-	au FileType sass SyntasticDisable
+	autocmd FileType scss setlocal noexpandtab tabstop=3 shiftwidth=3
+	" au FileType sass SyntasticDisable
+	" }}}
+
+	"------------------+
+	" PUG           {{{
+	"------------------+
+	au FileType pug setlocal ts=3 sts=3 sw=3 noexpandtab
 	" }}}
 
 	"------------------+
