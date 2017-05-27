@@ -325,7 +325,7 @@ match errorMsg /[^\t]\zs\t+/
 "------------------------------------+
 " Omnicompletion options           {{{
 "------------------------------------+
-set completeopt=menu,menuone,longest
+" set completeopt=menu,menuone,longest
 "}}}
 
 "------------------------------------+
