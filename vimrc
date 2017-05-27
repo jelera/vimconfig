@@ -522,7 +522,7 @@ nnoremap <silent> <Leader><space> :nohlsearch<CR>
 nmap <Leader>l :set list!<CR>
 
 " Toggle Foldings with the space bar
-nnoremap <Space> za
+nnoremap <Space>z za
 
 " Indent visual selected code without unselecting
 " As seen in vimcasts.org
