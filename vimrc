@@ -369,16 +369,16 @@ set foldtext=FoldText()
 set t_Co=256
 colorscheme hybrid
 
-" These customizations are for the Hybrid Colorscheme, for my readability {{{
-hi  FoldColumn   guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
+"" These customizations are for the Hybrid Colorscheme, for my readability {{{
+"hi  FoldColumn   guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
 hi  Folded       guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
-hi  LineNr       guifg=#4e4e4e guibg=#000000               ctermfg=237 ctermbg=233
-hi  helpExample  guifg=#5faf00
+"hi  LineNr       guifg=#4e4e4e guibg=#000000               ctermfg=237 ctermbg=233
+"hi  helpExample  guifg=#5faf00
 
-" This piece highlights the border of 80 char"
-let &colorcolumn=join(range(81,999),",")
-highlight ColorColumn ctermbg=235 guibg=#2c2d27
-"}}}
+"" This piece highlights the border of 80 char"
+"let &colorcolumn=join(range(81,999),",")
+"highlight ColorColumn ctermbg=235 guibg=#2c2d27
+""}}}
 
 if has('gui_running')
 " GVIM / MacVim"{{{
@@ -388,7 +388,7 @@ if has('gui_running')
 	if has('mac')
 		" For MacVim
 		set macligatures
-		set guifont=Fira\ Code\ Retina\:h14
+		set guifont=FuraCode\ Nerd\ Font\:h14
 	else
 		" For Linux gVim
 		set guifont=Fira\ Code\ 10
