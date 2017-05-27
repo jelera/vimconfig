@@ -8,14 +8,14 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Wed 14 Sep 2016 08:09:43 PM CDT
+" Last Updated: Sat 27 May 2017 12:25:54 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
 "               to experiment with your own mappings, plugins and configs.
 "
 "      License: MIT
-"               Copyright (c) 2016 Jose Elera
+"               Copyright (c) 2017 Jose Elera
 "
 "               Permission is hereby granted, free of charge, to any person
 "               obtaining a copy of this software and associated documentation
@@ -546,10 +546,10 @@ nnoremap <silent> N   N:call HLNext(0.2)<cr>
 nnoremap <leader>nw :%s/\s\+$//e<cr>:let @/=''<CR>
 
 " Autocomplete {} indent and reposition of the cursor in the middle
-inoremap <silent> <CR> <C-R>=EnterIndent()<CR>
+" inoremap <silent> <CR> <C-R>=EnterIndent()<CR>
 
 " Expand Compressed HTML with Tidy
-map <leader>td :%!tidy -q -config ~/.vim/tidy.conf --tidy-mark 0 2>/dev/null<CR><ESC>gg=G
+" map <leader>td :%!tidy -q -config ~/.vim/tidy.conf --tidy-mark 0 2>/dev/null<CR><ESC>gg=G
 
 " Documentation Writing and Formatting
 map <leader>h1 yypVr=o
@@ -770,8 +770,6 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	" Javascript     {{{
 	"------------------+
-	au BufNewFile,BufRead *.jsm setlocal ft=javascript
-	au BufNewFile,BufRead Jakefile setlocal ft=javascript
 	au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
 	au FileType javascript setlocal nocindent
 
@@ -792,16 +790,9 @@ augroup Filetype Specific         "{{{
 	" }}}
 
 	"------------------+
-	" LESS           {{{
-	"------------------+
-	au BufNewFile,BufRead *.less setl ft=less
-	" }}}
-
-	"------------------+
 	" SASS           {{{
 	"------------------+
 	autocmd FileType scss setlocal noexpandtab tabstop=3 shiftwidth=3
-	" au FileType sass SyntasticDisable
 	" }}}
 
 	"------------------+
@@ -835,17 +826,6 @@ augroup Filetype Specific         "{{{
 	au BufNewFile,BufRead *.jinja setlocal syntax=htmljinja
 	au BufNewFile,BufRead *.mako setlocal ft=mako
 	" }}}
-
-	"------------------+
-	" Perl           {{{
-	"------------------+
-	au FileType perl setlocal makeprg=perl\ -W\ %
-	" Sample errors:
-	" Type of arg 1 to push must be array (not hash element) at NFrame.pm line 129, near ");"
-	" Useless use of a constanst at test.pl line 5.
-	au FileType perl setlocal errorformat=%m\ at\ %f\ line\ %l%.%#,
-				\%-G%.%# " ignore any lines that didn't match one of the patterns above
-	"}}}
 
 	"------------------+
 	" Nginx          {{{
@@ -1087,55 +1067,55 @@ function! <SID>SynStack() "{{{
 	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunction "}}}
 
-function! EnterIndent() "{{{
-	" Taken from https://github.com/acustodioo/vim-enter-indent
-	let EnterIndentActive = [
-				\ {'left' : '[\{\[\(]','right' : '[\)\]\}]'},
-				\ {'left' : '<[^>]*>', 'right' : '</[^>]*>'},
-				\ {'left' : '<?\(php\)\?', 'right' : '?>'},
-				\ {'left' : '<%', 'right' : '%>'},
-				\ {'left' : '\[[^\]]*\]', 'right' : '\[/[^\]]*\]'},
-				\ {'left' : '<!--', 'right' : '-->'},
-				\ {'left' : '\(#\)\?{[^\}]*\}', 'right' : '\(#\)\?{[^\}]*\}'},
-				\ ]
+" function! EnterIndent() "{{{
+" 	" Taken from https://github.com/acustodioo/vim-enter-indent
+" 	let EnterIndentActive = [
+" 				\ {'left' : '[\{\[\(]','right' : '[\)\]\}]'},
+" 				\ {'left' : '<[^>]*>', 'right' : '</[^>]*>'},
+" 				\ {'left' : '<?\(php\)\?', 'right' : '?>'},
+" 				\ {'left' : '<%', 'right' : '%>'},
+" 				\ {'left' : '\[[^\]]*\]', 'right' : '\[/[^\]]*\]'},
+" 				\ {'left' : '<!--', 'right' : '-->'},
+" 				\ {'left' : '\(#\)\?{[^\}]*\}', 'right' : '\(#\)\?{[^\}]*\}'},
+" 				\ ]
 
-	let GetLine = getline('.')
-	let ColNow = col('.') - 1
+" 	let GetLine = getline('.')
+" 	let ColNow = col('.') - 1
 
-	let RightGetLine = substitute(
-				\ strpart(GetLine, ColNow, col('$')),
-				\ '^[ ]*', '', ''
-				\ )
+" 	let RightGetLine = substitute(
+" 				\ strpart(GetLine, ColNow, col('$')),
+" 				\ '^[ ]*', '', ''
+" 				\ )
 
-	if RightGetLine == "" | call feedkeys("\<CR>", 'n') | return '' | endif
+" 	if RightGetLine == "" | call feedkeys("\<CR>", 'n') | return '' | endif
 
-	for value in EnterIndentActive
-		if matchstr(RightGetLine, '^' . value.right) != ""
-			let EnterIndentRun = 1 | break
-		endif
-	endfor
+" 	for value in EnterIndentActive
+" 		if matchstr(RightGetLine, '^' . value.right) != ""
+" 			let EnterIndentRun = 1 | break
+" 		endif
+" 	endfor
 
-	if !exists('EnterIndentRun') | call feedkeys("\<CR>", 'n') | return '' | endif
+" 	if !exists('EnterIndentRun') | call feedkeys("\<CR>", 'n') | return '' | endif
 
-	let LeftGetLine = substitute(
-				\ strpart(GetLine, 0, ColNow),
-				\ '[ ]*$', '', ''
-				\ )
+" 	let LeftGetLine = substitute(
+" 				\ strpart(GetLine, 0, ColNow),
+" 				\ '[ ]*$', '', ''
+" 				\ )
 
-	if matchstr(LeftGetLine, value.left . '$') == ""
-		call feedkeys("\<CR>", 'n') | return ''
-	endif
+" 	if matchstr(LeftGetLine, value.left . '$') == ""
+" 		call feedkeys("\<CR>", 'n') | return ''
+" 	endif
 
-	let LineNow = line('.')
-	let Indent = substitute(LeftGetLine, '^\([ |\t]*\).*$', '\1', '')
+" 	let LineNow = line('.')
+" 	let Indent = substitute(LeftGetLine, '^\([ |\t]*\).*$', '\1', '')
 
-	call setline(LineNow, LeftGetLine)
-	call append(LineNow, Indent . RightGetLine)
-	call append(LineNow, Indent)
-	call feedkeys("\<Down>\<Esc>\A\<Tab>", 'n')
+" 	call setline(LineNow, LeftGetLine)
+" 	call append(LineNow, Indent . RightGetLine)
+" 	call append(LineNow, Indent)
+" 	call feedkeys("\<Down>\<Esc>\A\<Tab>", 'n')
 
-	return ''
-endfunction "}}}
+" 	return ''
+" endfunction "}}}
 
 function! HLNext (blinktime) "{{{
 	highlight WhiteOnRed ctermfg=white ctermbg=red
@@ -1153,6 +1133,12 @@ function! GetCwd() "{{{
 	let currentdir = substitute(getcwd(), expand("$home"), "~", "g")
 	return currentdir
 endfunction "}}}
+
+function! Relpath(filename)
+	let cwd = getcwd()
+	let s = substitute(a:filename, l:cwd . "/" , "", "")
+	return s
+endfunction
 
 function! GetFileSize() "{{{
 	let bytes = getfsize(expand("%:p"))
