@@ -40,296 +40,149 @@
 "               SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"----------------------------------------------------------------------------//
-" NEOBUNDLE AND 3RD-PARTY PLUGINS                                           {{{
-"----------------------------------------------------------------------------//
-set nocompatible
-if has('vim_starting')
-set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
-call neobundle#begin(expand('~/.vim/bundle/'))
+""----------------------------------------------------------------------------//
 
-"------------------------------------+
-" Neobundle, Vimproc               {{{
-"------------------------------------+
-NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc', {
-	\ 'build' : {
-	\ 'windows' : 'make -f make_mingw32.mak',
-	\ 'cygwin' : 'make -f make_cygwin.mak',
-	\ 'mac' : 'make -f make_mac.mak',
-	\ 'unix' : 'make -f make_unix.mak',
-	\ },
-\ }
-"}}}
+"----------------------------------------------------------------------------//
+" VIM-PLUG                                                                  {{{
+"----------------------------------------------------------------------------//
+" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+call plug#begin('~/.vim/plugged')
 
+" General Plugins                  {{{
 "------------------------------------+
-" Plugins (settings and mappings)  {{{
-"------------------+-----------------+
-" UI/Usability   {{{
-"------------------+
-NeoBundle 'vim-airline/vim-airline' "{{{
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' "{{{
 	let g:airline_powerline_fonts = 1
 	let g:airline_theme = "tomorrow"
-	let g:airline_section_c = '%t %{GetFileSize()}'
 	" let g:airline_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
+	" let g:airline_section_c = '%t %{GetFileSize()}'
+	let g:airline_section_c = '%t %{GetFileSize()} (%{Relpath(expand("%:p"))})'
 "}}}
-NeoBundle 'vim-airline/vim-airline-themes'
-NeoBundle 'ctrlpvim/ctrlp.vim'
-let g:ctrlp_custom_ignore = {
-			\ 'dir':  'node_modules$',
-			\ }
-
-
-
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-eunuch'
-NeoBundle 'tpope/vim-unimpaired'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'mhinz/vim-signify'
-NeoBundle 'mhinz/vim-startify'
-NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'],
-\ 'autoload':{'commands':'Gitv'}}
-NeoBundleLazy 'junegunn/goyo.vim', {'autoload':{'commands':'Goyo'}}
-"}}}
-
-"------------------+
-" Text helpers   {{{
-"------------------+
-NeoBundle 'tpope/vim-fugitive' " {{{
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-fugitive' " {{{
 	" automatically delete fugitive buffers when leaving them
 	autocmd BufReadPost fugitive://* setlocal bufhidden=delete
 "}}}
+Plug 'junegunn/gv.vim'
+Plug 'tpope/vim-commentary'
+Plug 'mhinz/vim-signify'
+Plug 'mhinz/vim-startify'
+Plug 'w0rp/ale'
+Plug 'lifepillar/vim-mucomplete' "{{{
+	set completeopt+=menuone
+	inoremap <expr> <c-e> mucomplete#popup_exit("\<c-e>")
+	inoremap <expr> <c-y> mucomplete#popup_exit("\<c-y>")
+	inoremap <expr>  <cr> mucomplete#popup_exit("\<cr>")
 
-NeoBundle 'scrooloose/syntastic' " {{{
-	let g:syntastic_enable_signs = 1
-	let g:syntastic_auto_loc_list = 0
-	let g:syntastic_python_checkers = ['flake8']
+	set completeopt+=noselect
+	set shortmess+=c   " Shut off completion messages
+	set belloff+=ctrlg " If Vim beeps during completion
+	let g:mucomplete#enable_auto_at_startup = 1
 "}}}
-
-NeoBundle 'Shougo/neosnippet' " {{{
-	" Plugin key-mappings.
-	imap <C-k> <Plug>(neosnippet_expand_or_jump)
-	smap <C-k> <Plug>(neosnippet_expand_or_jump)
-	xmap <C-k> <Plug>(neosnippet_expand_target)
-	" SuperTab like snippets behavior.
-	imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	\ "\<Plug>(neosnippet_expand_or_jump)"
-	\: pumvisible() ? "\<C-n>" : "\<TAB>"
-	smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	\ "\<Plug>(neosnippet_expand_or_jump)"
-	\: "\<TAB>"
-	" For snippet_complete marker.
-	if has('conceal')
-	set conceallevel=2 concealcursor=i
-	endif
-	" Enable snipMate compatibility feature.
-	let g:neosnippet#enable_snipmate_compatibility = 1
-	" Tell Neosnippet about the other snippets
-	let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "{{{
+	nnoremap <silent> <C-p> :FZF -m<CR>
 "}}}
-
-NeoBundle 'git@github.com:jelera/vim-template' "{{{
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' "{{{
+	" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+	let g:UltiSnipsExpandTrigger="<C-t>"
+	let g:UltiSnipsJumpForwardTrigger="<c-t>k"
+	let g:UltiSnipsJumpBackwardTrigger="<c-t>j"
+"}}}
+Plug 'junegunn/goyo.vim', {'for': 'markdown', 'on': 'Goyo'}
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' } "{{{
+	nmap <space>t :NERDTreeToggle<CR>
+"}}}
+Plug 'majutsushi/tagbar' "{{{
+	nmap <space>g :TagbarToggle<CR>
+	let g:tagbar_type_markdown = {
+				\ 'ctagstype' : 'markdown',
+				\ 'kinds' : [
+				\ 'h:Heading_L1',
+				\ 'i:Heading_L2',
+				\ 'k:Heading_L3'
+				\ ]
+				\ }
+	let g:tagbar_type_css = {
+				\ 'ctagstype' : 'Css',
+				\ 'kinds' : [
+				\ 'c:classes',
+				\ 's:selectors',
+				\ 'i:identities'
+				\ ]
+				\ }
+	let g:tagbar_type_ruby = {
+				\ 'kinds' : [
+				\ 'm:modules',
+				\ 'c:classes',
+				\ 'd:describes',
+				\ 'C:contexts',
+				\ 'f:methods',
+				\ 'F:singleton methods'
+				\ ]
+				\ }
+"}}}
+Plug 'git@github.com:jelera/vim-template' "{{{
 	let g:username = "Jose Elera"
 	let g:email = "jelera@gmail.com"
 "}}}
+Plug 'godlygeek/tabular'
+Plug 'jiangmiao/auto-pairs'
+Plug 'alvan/vim-closetag'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'mbbill/undotree'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'Yggdroot/indentLine'
 
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'tpope/vim-commentary'
-NeoBundle 'christoomey/vim-tmux-navigator'
-NeoBundle 'godlygeek/tabular'
-"}}}
+Plug 'w0ng/vim-hybrid'
+Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
-"------------------+
-" Autocompletion {{{
-"------------------+
-NeoBundle 'Shougo/neocomplete.vim' " {{{
-	"Note: This option must set it in .vimrc(_vimrc). NOT IN .gvimrc(_gvimrc)!
-	" Disable AutoComplPop.
-	let g:acp_enableAtStartup = 0
-	" Use neocomplete.
-	let g:neocomplete#enable_at_startup = 1
-	" Use smartcase.
-	let g:neocomplete#enable_smart_case = 1
-	" Set minimum syntax keyword length.
-	let g:neocomplete#sources#syntax#min_keyword_length = 3
-	let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-	" Define dictionary.
-	let g:neocomplete#sources#dictionary#dictionaries = {
-				\ 'default' : '',
-				\ 'vimshell' : $HOME.'/.vimshell_hist',
-				\ 'scheme' : $HOME.'/.gosh_completions'
-				\ }
-	" Define keyword.
-	if !exists('g:neocomplete#keyword_patterns')
-		let g:neocomplete#keyword_patterns = {}
-	endif
-	let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-	" Plugin key-mappings.
-	inoremap <expr><C-g> neocomplete#undo_completion()
-	inoremap <expr><C-l> neocomplete#complete_common_string()
-	" Recommended key-mappings.
-	" <CR>: close popup and save indent.
-	inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-	function! s:my_cr_function()
-		return neocomplete#smart_close_popup() . "\<CR>"
-		" For no inserting <CR> key.
-		"return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-	endfunction
-	" <TAB>: completion.
-	inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-	" <C-h>, <BS>: close popup and delete backword char.
-	inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-	inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-	inoremap <expr><C-y> neocomplete#close_popup()
-	inoremap <expr><C-e> neocomplete#cancel_popup()
-	" Close popup by <Space>.
-	"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-	" For cursor moving in insert mode(Not recommended)
-	"inoremap <expr><Left> neocomplete#close_popup() . "\<Left>"
-	"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-	"inoremap <expr><Up> neocomplete#close_popup() . "\<Up>"
-	"inoremap <expr><Down> neocomplete#close_popup() . "\<Down>"
-	" Or set this.
-	"let g:neocomplete#enable_cursor_hold_i = 1
-	" Or set this.
-	"let g:neocomplete#enable_insert_char_pre = 1
-	" AutoComplPop like behavior.
-	"let g:neocomplete#enable_auto_select = 1
-	" Shell like behavior(not recommended).
-	"set completeopt+=longest
-	"let g:neocomplete#enable_auto_select = 1
-	"let g:neocomplete#disable_auto_complete = 1
-	"inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-	" Enable omni completion.
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-	" Enable heavy omni completion.
-	if !exists('g:neocomplete#sources#omni#input_patterns')
-		let g:neocomplete#sources#omni#input_patterns = {}
-	endif
-	"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-	"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-	"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-	" For perlomni.vim setting.
-	" https://github.com/c9s/perlomni.vim
-	let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-" }}}
-"}}}
-
-"------------------+
-" Colorschemes   {{{
-"------------------+
-NeoBundle 'git@github.com:jelera/vim-hybrid.git'
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'NLKNguyen/papercolor-theme'
-"}}}
-
-"------------------+
-" Navigation     {{{
-"------------------+
-NeoBundle 'mbbill/undotree' "{{{
-	nnoremap <silent> <F5> :UndotreeToggle<CR>
-"}}}
-
-NeoBundle 'majutsushi/tagbar' "{{{
-	nnoremap <silent> <F9> :TagbarToggle<CR>
-	let g:tagbar_type_markdown = {
-	\ 'ctagstype' : 'markdown',
-	\ 'kinds' : [
-	\ 'h:Heading_L1',
-	\ 'i:Heading_L2',
-	\ 'k:Heading_L3'
-	\ ]
-	\ }
-	let g:tagbar_type_css = {
-	\ 'ctagstype' : 'Css',
-	\ 'kinds' : [
-	\ 'c:classes',
-	\ 's:selectors',
-	\ 'i:identities'
-	\ ]
-	\ }
-	let g:tagbar_type_ruby = {
-	\ 'kinds' : [
-	\ 'm:modules',
-	\ 'c:classes',
-	\ 'd:describes',
-	\ 'C:contexts',
-	\ 'f:methods',
-	\ 'F:singleton methods'
-	\ ]
-	\ }
-"}}}
+Plug 'NLKNguyen/papercolor-theme'
 
 "}}}
 
-"------------------+
-" Filetype       {{{
-"------------------+
-	" Python -----------------{{{
-	NeoBundleLazy 'davidhalter/jedi-vim', {
-		\ 'autoload': { 'filetypes': ['python'] },
-	\ }
-	let g:jedi#popup_on_dot=0
-	NeoBundleLazy 'tmhedberg/SimpylFold', {
-		\ 'autoload': { 'filetypes': ['python'] },
-	\ }
-	"}}}
+" Filetype-Specific                {{{
+"------------------------------------+
+" Python -----------------{{{
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+" let g:jedi#popup_on_dot=0
+Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
+"}}}
 
-	" JavaScript -------------{{{
-	NeoBundleLazy 'git@github.com:jelera/vim-javascript-syntax.git', {'autoload':{'filetypes':['javascript']}}
-	NeoBundleLazy 'JavaScript-Indent', {'autoload':{'filetypes':['javascript']}}
-	NeoBundleLazy 'ternjs/tern_for_vim', {
-		\ 'autoload': { 'filetypes': ['javascript'] },
-		\ 'build' : {
-			\ 'mac' : 'npm install',
-			\ 'unix' : 'npm install'
-		\ }
-	\ }
-NeoBundle 'Shougo/vimproc', {
-	\ 'build' : {
-		\ 'windows' : 'make -f make_mingw32.mak',
-		\ 'cygwin' : 'make -f make_cygwin.mak',
-		\ 'mac' : 'make -f make_mac.mak',
-		\ 'unix' : 'make -f make_unix.mak',
-	\ },
-\ }
-	"}}}
+" JavaScript -----------------{{{
+Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
+Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+Plug 'vim-scripts/JavaScript-Indent', { 'for': 'javascript' }
+Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
+"}}}
 
-	" HTML/XML/CSS -----------{{{
-	NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}}
-	NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
-	NeoBundle 'digitaltoad/vim-pug'
-	"}}}
+" HTML/CSS/SCSS/HAML/PUG -----------------{{{
+Plug 'mattn/emmet-vim', { 'for': ['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache'] }
+Plug 'othree/html5.vim', { 'for': 'html' }
+Plug 'digitaltoad/vim-pug'
+Plug 'tpope/vim-haml'
+"}}}
 
-	" Ruby -------------------{{{
-	NeoBundleLazy 'tpope/vim-rails', {'autoload':{'filetypes':['ruby']}}
-	"}}}
+" Ruby/Rails -----------------{{{
+Plug 'tpope/vim-rails', { 'for': 'ruby' }
+"}}}
 
-	" Markdown ---------------{{{
-	NeoBundleLazy 'tpope/vim-markdown', {'autoload':{'filetypes':['markdown']}}
-	"}}}
+" Markdown -----------------{{{
+Plug 'tpope/vim-markdown', { 'for': 'markdown' }
+"}}}
 
-	" PHP  -------------------{{{
-	NeoBundleLazy 'StanAngeloff/php.vim', {'autoload':{'filetypes':['php']}}
-	NeoBundleLazy 'shawncplus/phpcomplete.vim', {'autoload':{'filetypes':['php']}}
-	"}}}
+" PHP -----------------{{{
+Plug 'StanAngeloff/php.vim', { 'for': 'php' }
+Plug 'shawncplus/phpcomplete.vim', { 'for': 'php' }
+"}}}
 
-	" WordPress  -------------{{{
-	NeoBundleLazy 'dsawardekar/wordpress.vim', {'autoload':{'filetypes':['php']}}
-	"}}}
-
-""}}}
+Plug 'dsawardekar/wordpress.vim'
 
 "}}}
 
-call neobundle#end()
-filetype plugin indent on " Required!
-NeoBundleCheck
+" Initialize plugin system
+call plug#end()
 "}}}
 
 
@@ -338,6 +191,7 @@ NeoBundleCheck
 "------------------------------------+---------------------------------------//
 " General Options                  {{{
 "------------------------------------+
+filetype plugin indent on
 set title
 set hidden
 syntax on
