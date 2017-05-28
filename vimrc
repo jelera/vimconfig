@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://www.twitter.com/jelera
 "
-" Last Updated: Sat 27 May 2017 12:25:54 PM CDT
+" Last Updated: Sun 28 May 2017 09:47:45 AM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -68,6 +68,7 @@ Plug 'junegunn/gv.vim'
 Plug 'tpope/vim-commentary'
 Plug 'mhinz/vim-signify'
 Plug 'mhinz/vim-startify'
+Plug 'tmhedberg/matchit'
 Plug 'w0rp/ale'
 Plug 'lifepillar/vim-mucomplete' "{{{
 	set completeopt+=menuone
@@ -132,12 +133,13 @@ Plug 'alvan/vim-closetag'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'mbbill/undotree'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'Yggdroot/indentLine'
-
+Plug 'nathanaelkane/vim-indent-guides' "{{{
+	let g:indent_guides_start_level = 2
+	let g:indent_guides_guide_size = 1
+"}}}
 Plug 'w0ng/vim-hybrid'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-
 Plug 'NLKNguyen/papercolor-theme'
 
 "}}}
