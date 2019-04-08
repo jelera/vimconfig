@@ -6,16 +6,16 @@
 "                 /_/    (_)   \_/   |_| |_| |_| |_|_|  \___|
 "
 "   Maintainer: Jose Elera (https://github.com/jelera)
-"               http://www.twitter.com/jelera
+"               http://jelera.github.io
 "
-" Last Updated: Wed 17 Feb 2016 02:33:57 AM CST
+" Last Updated: Sun 07 Apr 2019 08:02:53 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
 "               to experiment with your own mappings, plugins and configs.
 "
 "      License: MIT
-"               Copyright (c) 2014 Jose Elera Campana
+"               Copyright (c) 2019 Jose Elera
 "
 "               Permission is hereby granted, free of charge, to any person
 "               obtaining a copy of this software and associated documentation
@@ -41,265 +41,217 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "----------------------------------------------------------------------------//
-" NEOBUNDLE AND 3RD-PARTY PLUGINS                                           {{{
+" VIM-PLUG AND 3RD-PARTY PLUGINS                                           {{{
 "----------------------------------------------------------------------------//
 set nocompatible
-if has('vim_starting')
-set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
-call neobundle#begin(expand('~/.vim/bundle/'))
 
-"------------------------------------+
-" Neobundle, Vimproc               {{{
-"------------------------------------+
-NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc', {
-	\ 'build' : {
-	\ 'windows' : 'make -f make_mingw32.mak',
-	\ 'cygwin' : 'make -f make_cygwin.mak',
-	\ 'mac' : 'make -f make_mac.mak',
-	\ 'unix' : 'make -f make_unix.mak',
-	\ },
-\ }
-"}}}
+" Specify a directory for plugins
+" - For Neovim: ~/.local/share/nvim/plugged
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
+
+" Make sure you use single quotes
 
 "------------------------------------+
 " Plugins (settings and mappings)  {{{
 "------------------+-----------------+
 " UI/Usability   {{{
 "------------------+
-NeoBundle 'vim-airline/vim-airline' "{{{
+Plug 'vim-airline/vim-airline' "{{{
+Plug 'vim-airline/vim-airline-themes'
 	let g:airline_powerline_fonts = 1
 	let g:airline_theme = "tomorrow"
-	let g:airline_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
+	let g:airlne_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
 "}}}
-NeoBundle 'vim-airline/vim-airline-themes'
-
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-eunuch'
-NeoBundle 'tpope/vim-unimpaired'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'mhinz/vim-signify'
-NeoBundle 'mhinz/vim-startify'
-NeoBundleLazy 'gregsexton/gitv', {'depends':['tpope/vim-fugitive'],
-\ 'autoload':{'commands':'Gitv'}}
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
+Plug 'mhinz/vim-signify'
+Plug 'mhinz/vim-startify'
 "}}}
 
 "------------------+
 " Text helpers   {{{
 "------------------+
-NeoBundle 'tpope/vim-fugitive' " {{{
+Plug 'tpope/vim-fugitive' " {{{
 	" automatically delete fugitive buffers when leaving them
 	autocmd BufReadPost fugitive://* setlocal bufhidden=delete
 "}}}
-
-NeoBundle 'scrooloose/syntastic' " {{{
-	let g:syntastic_enable_signs = 1
-	let g:syntastic_auto_loc_list = 0
-	let g:syntastic_python_checkers = ['flake8']
+Plug 'w0rp/ale' " {{{
+	let g:airline#extensions#ale#enabled = 1
 "}}}
+" Track the engine.
+Plug 'SirVer/ultisnips' " {{{
+	" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+	let g:UltiSnipsExpandTrigger="<tab>"
+	let g:UltiSnipsJumpForwardTrigger="<c-b>"
+	let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-NeoBundle 'Shougo/neosnippet' " {{{
-	" Plugin key-mappings.
-	imap <C-k> <Plug>(neosnippet_expand_or_jump)
-	smap <C-k> <Plug>(neosnippet_expand_or_jump)
-	xmap <C-k> <Plug>(neosnippet_expand_target)
-	" SuperTab like snippets behavior.
-	imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	\ "\<Plug>(neosnippet_expand_or_jump)"
-	\: pumvisible() ? "\<C-n>" : "\<TAB>"
-	smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-	\ "\<Plug>(neosnippet_expand_or_jump)"
-	\: "\<TAB>"
-	" For snippet_complete marker.
-	if has('conceal')
-	set conceallevel=2 concealcursor=i
-	endif
-	" Enable snipMate compatibility feature.
-	let g:neosnippet#enable_snipmate_compatibility = 1
-	" Tell Neosnippet about the other snippets
-	let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+	" If you want :UltiSnipsEdit to split your window.
+	let g:UltiSnipsEditSplit="vertical"
 "}}}
-
-NeoBundle 'git@github.com:jelera/vim-template' "{{{
+Plug 'honza/vim-snippets'
+Plug 'git@github.com:jelera/vim-template' "{{{
 	let g:username = "Jose Elera"
 	let g:email = "jelera@gmail.com"
 "}}}
-
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'tpope/vim-commentary'
-NeoBundle 'christoomey/vim-tmux-navigator'
-NeoBundle 'godlygeek/tabular'
+Plug 'tpope/vim-commentary'
+Plug 'christoomey/vim-tmux-navigator'
 "}}}
 
 "------------------+
 " Autocompletion {{{
 "------------------+
-NeoBundle 'Shougo/neocomplete.vim' " {{{
-	"Note: This option must set it in .vimrc(_vimrc). NOT IN .gvimrc(_gvimrc)!
-	" Disable AutoComplPop.
-	let g:acp_enableAtStartup = 0
-	" Use neocomplete.
-	let g:neocomplete#enable_at_startup = 1
-	" Use smartcase.
-	let g:neocomplete#enable_smart_case = 1
-	" Set minimum syntax keyword length.
-	let g:neocomplete#sources#syntax#min_keyword_length = 3
-	let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-	" Define dictionary.
-	let g:neocomplete#sources#dictionary#dictionaries = {
-				\ 'default' : '',
-				\ 'vimshell' : $HOME.'/.vimshell_hist',
-				\ 'scheme' : $HOME.'/.gosh_completions'
-				\ }
-	" Define keyword.
-	if !exists('g:neocomplete#keyword_patterns')
-		let g:neocomplete#keyword_patterns = {}
-	endif
-	let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-	" Plugin key-mappings.
-	inoremap <expr><C-g> neocomplete#undo_completion()
-	inoremap <expr><C-l> neocomplete#complete_common_string()
-	" Recommended key-mappings.
-	" <CR>: close popup and save indent.
-	inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-	function! s:my_cr_function()
-		return neocomplete#smart_close_popup() . "\<CR>"
-		" For no inserting <CR> key.
-		"return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-	endfunction
-	" <TAB>: completion.
-	inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-	" <C-h>, <BS>: close popup and delete backword char.
-	inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-	inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-	inoremap <expr><C-y> neocomplete#close_popup()
-	inoremap <expr><C-e> neocomplete#cancel_popup()
-	" Close popup by <Space>.
-	"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-	" For cursor moving in insert mode(Not recommended)
-	"inoremap <expr><Left> neocomplete#close_popup() . "\<Left>"
-	"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-	"inoremap <expr><Up> neocomplete#close_popup() . "\<Up>"
-	"inoremap <expr><Down> neocomplete#close_popup() . "\<Down>"
-	" Or set this.
-	"let g:neocomplete#enable_cursor_hold_i = 1
-	" Or set this.
-	"let g:neocomplete#enable_insert_char_pre = 1
-	" AutoComplPop like behavior.
-	"let g:neocomplete#enable_auto_select = 1
-	" Shell like behavior(not recommended).
-	"set completeopt+=longest
-	"let g:neocomplete#enable_auto_select = 1
-	"let g:neocomplete#disable_auto_complete = 1
-	"inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-	" Enable omni completion.
-	autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-	autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-	autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-	autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-	autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-	" Enable heavy omni completion.
-	if !exists('g:neocomplete#sources#omni#input_patterns')
-		let g:neocomplete#sources#omni#input_patterns = {}
-	endif
-	"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-	"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-	"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-	" For perlomni.vim setting.
-	" https://github.com/c9s/perlomni.vim
-	let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-" }}}
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+Plug 'wokalski/autocomplete-flow', { 'for': 'javascript' }
+Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
+Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
+Plug 'takkii/ruby-dictionary3', { 'for': 'ruby' }
+Plug 'takkii/Bignyanco', { 'for': 'ruby' }
+Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
+Plug 'shougo/neco-vim', { 'for': 'vim' }
 "}}}
 
 "------------------+
 " Colorschemes   {{{
 "------------------+
-NeoBundle 'git@github.com:jelera/vim-hybrid.git'
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'NLKNguyen/papercolor-theme'
+Plug 'git@github.com:jelera/vim-hybrid.git'
+Plug 'chriskempson/base16-vim'
+Plug 'NLKNguyen/papercolor-theme'
 "}}}
 
 "------------------+
 " Navigation     {{{
 "------------------+
-NeoBundle 'mbbill/undotree' "{{{
-	nnoremap <silent> <F5> :UndotreeToggle<CR>
-"}}}
-
-NeoBundle 'majutsushi/tagbar' "{{{
-	nnoremap <silent> <F9> :TagbarToggle<CR>
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
+	nnoremap <silent> <leader><leader>t :TagbarToggle<CR>
 	let g:tagbar_type_markdown = {
 	\ 'ctagstype' : 'markdown',
 	\ 'kinds' : [
-	\ 'h:Heading_L1',
-	\ 'i:Heading_L2',
-	\ 'k:Heading_L3'
+		\ 'h:Heading_L1',
+		\ 'i:Heading_L2',
+		\ 'k:Heading_L3'
 	\ ]
 	\ }
 	let g:tagbar_type_css = {
 	\ 'ctagstype' : 'Css',
 	\ 'kinds' : [
-	\ 'c:classes',
-	\ 's:selectors',
-	\ 'i:identities'
+		\ 'c:classes',
+		\ 's:selectors',
+		\ 'i:identities'
 	\ ]
 	\ }
+	let g:tagbar_type_javascript = {
+	      \ 'ctagstype': 'javascript',
+	      \ 'ctagsbin': 'jsctags',
+	      \ 'kinds': [
+	      \ 'A:arrays',
+	      \ 'P:properties',
+	      \ 'T:tags',
+	      \ 'O:objects',
+	      \ 'G:generator functions',
+	      \ 'F:functions',
+	      \ 'C:constructors/classes',
+	      \ 'M:methods',
+	      \ 'V:variables',
+	      \ 'I:imports',
+	      \ 'E:exports',
+	      \ 'S:styled components'
+      	\ ]}
 	let g:tagbar_type_ruby = {
 	\ 'kinds' : [
-	\ 'm:modules',
-	\ 'c:classes',
-	\ 'd:describes',
-	\ 'C:contexts',
-	\ 'f:methods',
-	\ 'F:singleton methods'
+		\ 'm:modules',
+		\ 'c:classes',
+		\ 'd:describes',
+		\ 'C:contexts',
+		\ 'f:methods',
+		\ 'F:singleton methods'
 	\ ]
 	\ }
+	if executable('ripper-tags')
+	  let g:tagbar_type_ruby = {
+	      \ 'kinds'      : ['m:modules',
+			      \ 'c:classes',
+			      \ 'C:constants',
+			      \ 'F:singleton methods',
+			      \ 'f:methods',
+			      \ 'a:aliases'],
+	      \ 'kind2scope' : { 'c' : 'class',
+			       \ 'm' : 'class' },
+	      \ 'scope2kind' : { 'class' : 'c' },
+	      \ 'ctagsbin'   : 'ripper-tags',
+	      \ 'ctagsargs'  : ['-f', '-']
+	      \ }
+	endif
+	let g:tagbar_type_typescript = {
+	  \ 'ctagsbin' : 'tstags',
+	  \ 'ctagsargs' : '-f-',
+	  \ 'kinds': [
+	    \ 'e:enums:0:1',
+	    \ 'f:function:0:1',
+	    \ 't:typealias:0:1',
+	    \ 'M:Module:0:1',
+	    \ 'I:import:0:1',
+	    \ 'i:interface:0:1',
+	    \ 'C:class:0:1',
+	    \ 'm:method:0:1',
+	    \ 'p:property:0:1',
+	    \ 'v:variable:0:1',
+	    \ 'c:const:0:1',
+	  \ ],
+	  \ 'sort' : 0
+	\ }
 "}}}
+
+ Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
 "}}}
 
 "------------------+
 " Filetype       {{{
 "------------------+
-	" Python -----------------{{{
-	NeoBundleLazy 'davidhalter/jedi-vim', {
-		\ 'autoload': { 'filetypes': ['python'] },
-	\ }
-	let g:jedi#popup_on_dot=0
-	NeoBundleLazy 'tmhedberg/SimpylFold', {
-		\ 'autoload': { 'filetypes': ['python'] },
-	\ }
-	"}}}
-
-	" JavaScript -------------{{{
-	NeoBundleLazy 'git@github.com:jelera/vim-javascript-syntax.git', {'autoload':{'filetypes':['javascript']}}
-	NeoBundleLazy 'JavaScript-Indent', {'autoload':{'filetypes':['javascript']}}
-	NeoBundleLazy 'marijnh/tern_for_vim', {
-	\ 'autoload': { 'filetypes': ['javascript'] }
-	\ }
+	" JavaScript, JSON, ES6, JSX -------------{{{
+	Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
+	Plug 'mxw/vim-jsx'
+	Plug 'vim-scripts/JavaScript-Indent', { 'for': 'javascript' }
+	Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
+	Plug 'elzr/vim-json', { 'for': ['javascript', 'json', 'javascript.jsx'] }
 	"}}}
 
 	" HTML/XML/CSS -----------{{{
-	NeoBundleLazy 'mattn/emmet-vim', {'autoload':{'filetypes':['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache']}}
-	NeoBundleLazy 'othree/html5.vim', {'autoload':{'filetypes':['html']}}
+	Plug 'mattn/emmet-vim', { 'for': ['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache'] }
+	Plug 'othree/html5.vim', {'for': ['html'] }
 	"}}}
 
 	" Ruby -------------------{{{
-	NeoBundle 'tpope/vim-rails'
+	Plug 'tpope/vim-rails'
 	"}}}
 
 	" Markdown ---------------{{{
-	NeoBundle 'tpope/vim-markdown'
+	Plug 'tpope/vim-markdown'
 	"}}}
 
 ""}}}
 
-"}}}
+" Initialize plugin system
+call plug#end()
 
-call neobundle#end()
 filetype plugin indent on " Required!
-NeoBundleCheck
+
+"}}}
 "}}}
 
 
@@ -400,11 +352,10 @@ set wildmode=full
 "------------------------------------+
 " backups
 set backup
-set backupdir=~/.vim/.cache/backup
 
 " swap files
-set directory=~/.vim/.cache/swap
-" set noswapfile
+" set directory=~/.vim/.cache/swap
+set noswapfile
 "}}}
 
 "------------------------------------+
@@ -463,7 +414,7 @@ command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!"
 nnoremap \ :Ag<SPACE>
 "}}}
 
-"}}}
+"}}}}}}
 
 
 "----------------------------------------------------------------------------//
@@ -744,6 +695,8 @@ iab Flase False
 iab sefl self
 iab pritn print
 iab prnt print
+iab edn end
+iab dfe def
 
 iab Whta What
 iab whta what
