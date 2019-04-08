@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Sun 07 Apr 2019 08:02:53 PM CDT
+" Last Updated: Sun 07 Apr 2019 08:14:46 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -350,12 +350,10 @@ set wildmode=full
 "------------------------------------+
 " Backup and Swap                  {{{
 "------------------------------------+
-" backups
-set backup
 
-" swap files
-" set directory=~/.vim/.cache/swap
-set noswapfile
+set backupdir=.backup/,~/.backup/,/tmp//
+set directory=.swp/,~/.swp/,/tmp//
+set undodir=.undo/,~/.undo/,/tmp//
 "}}}
 
 "------------------------------------+
