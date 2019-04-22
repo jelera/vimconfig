@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Sun 07 Apr 2019 08:14:46 PM CDT
+" Last Updated: Mon 22 Apr 2019 01:46:22 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -64,6 +64,7 @@ Plug 'vim-airline/vim-airline-themes'
 	let g:airlne_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
 "}}}
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
 Plug 'mhinz/vim-signify'
@@ -79,6 +80,12 @@ Plug 'tpope/vim-fugitive' " {{{
 "}}}
 Plug 'w0rp/ale' " {{{
 	let g:airline#extensions#ale#enabled = 1
+	let g:ale_sign_error = '>>'
+	let g:ale_sign_warning = '!-'
+	let g:ale_set_highlights = 0
+	let g:ale_echo_msg_error_str = 'E'
+	let g:ale_echo_msg_warning_str = 'W'
+	let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 "}}}
 " Track the engine.
 Plug 'SirVer/ultisnips' " {{{
@@ -96,33 +103,36 @@ Plug 'git@github.com:jelera/vim-template' "{{{
 	let g:email = "jelera@gmail.com"
 "}}}
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-endwise'
+
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'jiangmiao/auto-pairs'
 "}}}
 
 "------------------+
 " Autocompletion {{{
 "------------------+
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" let g:deoplete#enable_at_startup = 1
 
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-Plug 'wokalski/autocomplete-flow', { 'for': 'javascript' }
-Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
-Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-Plug 'takkii/ruby-dictionary3', { 'for': 'ruby' }
-Plug 'takkii/Bignyanco', { 'for': 'ruby' }
-Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
-Plug 'shougo/neco-vim', { 'for': 'vim' }
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
+" Plug 'wokalski/autocomplete-flow', { 'for': 'javascript' }
+" Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
+" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
+" Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
+" " Plug 'takkii/ruby-dictionary3', { 'for': 'ruby' }
+" Plug 'takkii/Bignyanco', { 'for': 'ruby' }
+" Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
+" Plug 'shougo/neco-vim', { 'for': 'vim' }
 "}}}
 
 "------------------+
@@ -217,6 +227,9 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 "}}}
 
  Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+	let g:Lf_ShortcutF = '<C-P>'
+
+ Plug 'scrooloose/nerdtree'
 
 "}}}
 
@@ -237,11 +250,14 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 	"}}}
 
 	" Ruby -------------------{{{
+	Plug 'vim-ruby/vim-ruby'
 	Plug 'tpope/vim-rails'
 	"}}}
 
 	" Markdown ---------------{{{
 	Plug 'tpope/vim-markdown'
+	Plug 'JamshedVesuna/vim-markdown-preview'
+		let vim_markdown_preview_github=1
 	"}}}
 
 ""}}}
@@ -405,7 +421,7 @@ if executable('ag')
 endif
 
 " Search the word under the cursor with K
-nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+" nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " bind \ (backward slash) to grep shortcut
 command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!"
@@ -453,7 +469,7 @@ if has('gui_running')
 	" Font Selection
 	if has('mac')
 		" For MacVim
-		set guifont=Meslo\ LG\ L\ DZ\ for\ Powerline\:h9
+		set guifont=Fira\ Code:h14
 	else
 		" For Linux gVim
 		set guifont=Fura\ Mono\ for\ Powerline\ 10
@@ -467,13 +483,13 @@ else
 	endif
 	if $TERM_PROGRAM == 'iTerm.app'
 		" different cursors for insert vs normal mode
-		if exists('$TMUX')
-			let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-			let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-		else
-			let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-			let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-		endif
+		" if exists('$TMUX')
+		" 	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+		" 	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+		" else
+		" 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+		" 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+		" endif
 	endif
 "}}}
 endif
@@ -516,7 +532,7 @@ set scrolloff=5
 set sidescrolloff=20
 
 " The screen won't be redrawn unless actions took place
-set lazyredraw
+" set lazyredraw
 
 " When moving thru the lines, the cursor will try to stay in the previous columns
 set nostartofline
@@ -612,7 +628,7 @@ nnoremap <silent> N   N:call HLNext(0.2)<cr>
 nnoremap <leader>nw :%s/\s\+$//e<cr>:let @/=''<CR>
 
 " Autocomplete {} indent and reposition of the cursor in the middle
-inoremap <silent> <CR> <C-R>=EnterIndent()<CR>
+" inoremap <silent> <CR> <C-R>=EnterIndent()<CR>
 
 " Expand Compressed HTML with Tidy
 map <leader>td :%!tidy -q -config ~/.vim/tidy.conf --tidy-mark 0 2>/dev/null<CR><ESC>gg=G
@@ -646,7 +662,7 @@ inoremap <C-V> <C-o>"+P<C-o>=']
 set spelllang=en_us
 
 " Spanish spelling
-nnoremap <Leader>spa :bufdo set spelllang=es<CR>
+" nnoremap <Leader>spa :bufdo set spelllang=es<CR>
 
 " Faster spell correction (based on the first occurrance)
 inoremap <c-f> <c-g>u<Esc>[s1z=`]a<c-g>u
@@ -812,7 +828,7 @@ augroup Filetype Specific         "{{{
 	endif
 	function! PreviewMarkdownInBrowser()
 		if has("mac")
-			exec "!markdown % > /tmp/preview.html && open -a /Applications/Firefox.app/ /tmp/preview.html"
+			exec "!markdown % > /tmp/preview.html && open /tmp/preview.html"
 		else
 			exec "!markdown % > /tmp/preview.html && firefox /tmp/preview.html"
 		endif
@@ -886,7 +902,8 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	" Ruby           {{{
 	"------------------+
-	au FileType ruby setlocal ts=2 sts=2 sw=2 noexpandtab
+	au FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
+	au FileType eruby setlocal ts=2 sts=2 sw=2 expandtab
 	" }}}
 
 	"------------------+
@@ -924,14 +941,15 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	" SQL            {{{
 	"------------------+
+	au FileType sql setlocal ts=2 sts=2 sw=2 noexpandtab
 	au BufNewFile,BufRead *.sql set ft=sql foldmethod=marker
 
 	" http://stepanoff.org/wordpress/archives/1536
 	" Select Database
-	map <leader>db :call SwitchDB()<CR>
+	" map <leader>db :call SwitchDB()<CR>
 
 	" Run SQL Query
-	map <leader>sql :call DoQuery()<CR>
+	" map <leader>sql :call DoQuery()<CR>
 	" }}}
 
 augroup END "}}}
@@ -941,55 +959,55 @@ augroup END "}}}
 "----------------------------------------------------------------------------//
 " HELPER FUNCTIONS                                                          {{{
 "----------------------------------------------------------------------------//
-function! FoldText_PHP() "{{{
-	" This function uses code from phpfolding.vim
-	let l:curline = v:foldstart
-	let l:line = getline(l:curline)
+" function! FoldText_PHP() "{{{
+" 	" This function uses code from phpfolding.vim
+" 	let l:curline = v:foldstart
+" 	let l:line = getline(l:curline)
 
-	" Did we fold a DocBlock? {{{
-	if strridx(l:line, '#@+') != -1
-		if (matchstr(l:line, '^.*#@+..*$') == l:line)
-			let l:line = substitute(l:line, '^.*#@+', '', 'g') . ' ' . g:phpDocBlockIncludedPostfix
-		else
-			let l:line = getline(l:curline + 1) . ' ' . g:phpDocBlockIncludedPostfix
-		endif
-	" }}}
+" 	" Did we fold a DocBlock? {{{
+" 	if strridx(l:line, '#@+') != -1
+" 		if (matchstr(l:line, '^.*#@+..*$') == l:line)
+" 			let l:line = substitute(l:line, '^.*#@+', '', 'g') . ' ' . g:phpDocBlockIncludedPostfix
+" 		else
+" 			let l:line = getline(l:curline + 1) . ' ' . g:phpDocBlockIncludedPostfix
+" 		endif
+" 	" }}}
 
-	" Did we fold an API comment block? {{{
-	elseif strridx(l:line, "\/\*\*") != -1
-		let s:state = 0
+" 	" Did we fold an API comment block? {{{
+" 	elseif strridx(l:line, "\/\*\*") != -1
+" 		let s:state = 0
 
-		while l:curline < v:foldend
-			let l:loopline = getline(l:curline)
+" 		while l:curline < v:foldend
+" 			let l:loopline = getline(l:curline)
 
-			if s:state == 0 && strridx(l:loopline, "\*\/") != -1
-				let s:state = 1
-			elseif s:state == 1 && (matchstr(l:loopline, '^\s*$') != l:loopline)
-				break
-			endif
+" 			if s:state == 0 && strridx(l:loopline, "\*\/") != -1
+" 				let s:state = 1
+" 			elseif s:state == 1 && (matchstr(l:loopline, '^\s*$') != l:loopline)
+" 				break
+" 			endif
 
-			let l:curline = l:curline + 1
-		endwhile
+" 			let l:curline = l:curline + 1
+" 		endwhile
 
-		let l:line = getline(l:curline)
-	endif
-	" }}}
+" 		let l:line = getline(l:curline)
+" 	endif
+" 	" }}}
 
-	" Cleanup {{{
-	let l:line = substitute(l:line, '/\*\|\*/\d\=', '', 'g')
-	let l:line = substitute(l:line, '^\s*\*\?\s*', '', 'g')
-	let l:line = substitute(l:line, '{$', '', 'g')
-	let l:line = substitute(l:line, '($', '(...)', 'g')
-	" }}}
+" 	" Cleanup {{{
+" 	let l:line = substitute(l:line, '/\*\|\*/\d\=', '', 'g')
+" 	let l:line = substitute(l:line, '^\s*\*\?\s*', '', 'g')
+" 	let l:line = substitute(l:line, '{$', '', 'g')
+" 	let l:line = substitute(l:line, '($', '(...)', 'g')
+" 	" }}}
 
-	" Append postfix if there is PhpDoc in the fold {{{
-	if l:curline != v:foldstart
-		let l:line = l:line . " " . g:phpDocIncludedPostfix . " "
-	endif
-	" }}}
+" 	" Append postfix if there is PhpDoc in the fold {{{
+" 	if l:curline != v:foldstart
+" 		let l:line = l:line . " " . g:phpDocIncludedPostfix . " "
+" 	endif
+" 	" }}}
 
-	return FoldText(l:line)
-endfunction "}}}
+" 	return FoldText(l:line)
+" endfunction "}}}
 
 function! FoldText(...) "{{{
 	" This function uses code from doy's vim-foldtext:
@@ -1077,24 +1095,24 @@ function! FoldText(...) "{{{
 
 endfunction "}}}
 
-function! DoQuery() "{{{
-	if !exists("g:current_db")
-		call SwitchDB()
-	endif
-	let query_string = input(g:current_db . " > " )
-	if query_string != ""
-		exe "!mysql " . g:current_db . " -e \"" . escape(query_string, '"') . "\""
-	endif
-endfunction "}}}
+" function! DoQuery() "{{{
+" 	if !exists("g:current_db")
+" 		call SwitchDB()
+" 	endif
+" 	let query_string = input(g:current_db . " > " )
+" 	if query_string != ""
+" 		exe "!mysql " . g:current_db . " -e \"" . escape(query_string, '"') . "\""
+" 	endif
+" endfunction "}}}
 
-function! SwitchDB() "{{{
-	let g:current_db = input("Database > ")
-endfunction "}}}
+" function! SwitchDB() "{{{
+" 	let g:current_db = input("Database > ")
+" endfunction "}}}
 
 function! PreviewInBrowser() "{{{
 	if has("mac")
-		"exec "!open %"
-		exec "!open -a /Applications/Firefox.app/ %"
+		exec "!open %"
+		"exec "!open -a /Applications/Firefox.app/ %"
 		"exec "!open -a firefox.app %:p"
 	else
 		exec "!firefox %"
@@ -1148,55 +1166,55 @@ function! <SID>SynStack() "{{{
 	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunction "}}}
 
-function! EnterIndent() "{{{
-	" Taken from https://github.com/acustodioo/vim-enter-indent
-	let EnterIndentActive = [
-				\ {'left' : '[\{\[\(]','right' : '[\)\]\}]'},
-				\ {'left' : '<[^>]*>', 'right' : '</[^>]*>'},
-				\ {'left' : '<?\(php\)\?', 'right' : '?>'},
-				\ {'left' : '<%', 'right' : '%>'},
-				\ {'left' : '\[[^\]]*\]', 'right' : '\[/[^\]]*\]'},
-				\ {'left' : '<!--', 'right' : '-->'},
-				\ {'left' : '\(#\)\?{[^\}]*\}', 'right' : '\(#\)\?{[^\}]*\}'},
-				\ ]
+" function! EnterIndent() "{{{
+" 	" Taken from https://github.com/acustodioo/vim-enter-indent
+" 	let EnterIndentActive = [
+" 				\ {'left' : '[\{\[\(]','right' : '[\)\]\}]'},
+" 				\ {'left' : '<[^>]*>', 'right' : '</[^>]*>'},
+" 				\ {'left' : '<?\(php\)\?', 'right' : '?>'},
+" 				\ {'left' : '<%', 'right' : '%>'},
+" 				\ {'left' : '\[[^\]]*\]', 'right' : '\[/[^\]]*\]'},
+" 				\ {'left' : '<!--', 'right' : '-->'},
+" 				\ {'left' : '\(#\)\?{[^\}]*\}', 'right' : '\(#\)\?{[^\}]*\}'},
+" 				\ ]
 
-	let GetLine = getline('.')
-	let ColNow = col('.') - 1
+" 	let GetLine = getline('.')
+" 	let ColNow = col('.') - 1
 
-	let RightGetLine = substitute(
-				\ strpart(GetLine, ColNow, col('$')),
-				\ '^[ ]*', '', ''
-				\ )
+" 	let RightGetLine = substitute(
+" 				\ strpart(GetLine, ColNow, col('$')),
+" 				\ '^[ ]*', '', ''
+" 				\ )
 
-	if RightGetLine == "" | call feedkeys("\<CR>", 'n') | return '' | endif
+" 	if RightGetLine == "" | call feedkeys("\<CR>", 'n') | return '' | endif
 
-	for value in EnterIndentActive
-		if matchstr(RightGetLine, '^' . value.right) != ""
-			let EnterIndentRun = 1 | break
-		endif
-	endfor
+" 	for value in EnterIndentActive
+" 		if matchstr(RightGetLine, '^' . value.right) != ""
+" 			let EnterIndentRun = 1 | break
+" 		endif
+" 	endfor
 
-	if !exists('EnterIndentRun') | call feedkeys("\<CR>", 'n') | return '' | endif
+" 	if !exists('EnterIndentRun') | call feedkeys("\<CR>", 'n') | return '' | endif
 
-	let LeftGetLine = substitute(
-				\ strpart(GetLine, 0, ColNow),
-				\ '[ ]*$', '', ''
-				\ )
+" 	let LeftGetLine = substitute(
+" 				\ strpart(GetLine, 0, ColNow),
+" 				\ '[ ]*$', '', ''
+" 				\ )
 
-	if matchstr(LeftGetLine, value.left . '$') == ""
-		call feedkeys("\<CR>", 'n') | return ''
-	endif
+" 	if matchstr(LeftGetLine, value.left . '$') == ""
+" 		call feedkeys("\<CR>", 'n') | return ''
+" 	endif
 
-	let LineNow = line('.')
-	let Indent = substitute(LeftGetLine, '^\([ |\t]*\).*$', '\1', '')
+" 	let LineNow = line('.')
+" 	let Indent = substitute(LeftGetLine, '^\([ |\t]*\).*$', '\1', '')
 
-	call setline(LineNow, LeftGetLine)
-	call append(LineNow, Indent . RightGetLine)
-	call append(LineNow, Indent)
-	call feedkeys("\<Down>\<Esc>\A\<Tab>", 'n')
+" 	call setline(LineNow, LeftGetLine)
+" 	call append(LineNow, Indent . RightGetLine)
+" 	call append(LineNow, Indent)
+" 	call feedkeys("\<Down>\<Esc>\A\<Tab>", 'n')
 
-	return ''
-endfunction "}}}
+" 	return ''
+" endfunction "}}}
 
 function! HLNext (blinktime) "{{{
 	highlight WhiteOnRed ctermfg=white ctermbg=red
