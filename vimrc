@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Mon 22 Apr 2019 01:46:22 PM CDT
+" Last Updated: Wed 15 May 2019 10:57:47 AM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -88,15 +88,15 @@ Plug 'w0rp/ale' " {{{
 	let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 "}}}
 " Track the engine.
-Plug 'SirVer/ultisnips' " {{{
-	" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-	let g:UltiSnipsExpandTrigger="<tab>"
-	let g:UltiSnipsJumpForwardTrigger="<c-b>"
-	let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"Plug 'SirVer/ultisnips' " {{{
+"	" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+"	let g:UltiSnipsExpandTrigger="<tab>"
+"	let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"	let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-	" If you want :UltiSnipsEdit to split your window.
-	let g:UltiSnipsEditSplit="vertical"
-"}}}
+"	" If you want :UltiSnipsEdit to split your window.
+"	let g:UltiSnipsEditSplit="vertical"
+""}}}
 Plug 'honza/vim-snippets'
 Plug 'git@github.com:jelera/vim-template' "{{{
 	let g:username = "Jose Elera"
@@ -104,7 +104,7 @@ Plug 'git@github.com:jelera/vim-template' "{{{
 "}}}
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
-
+Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'jiangmiao/auto-pairs'
 "}}}
@@ -112,28 +112,21 @@ Plug 'jiangmiao/auto-pairs'
 "------------------+
 " Autocompletion {{{
 "------------------+
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
-" let g:deoplete#enable_at_startup = 1
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 
-" Plug 'autozimu/LanguageClient-neovim', {
-"     \ 'branch': 'next',
-"     \ 'do': 'bash install.sh',
-"     \ }
-" Plug 'wokalski/autocomplete-flow', { 'for': 'javascript' }
-" Plug 'ternjs/tern_for_vim', { 'for': 'javascript', 'do': 'npm install' }
-" Plug 'lvht/phpcd.vim', { 'for': 'php', 'do': 'composer install' }
-" Plug 'deoplete-plugins/deoplete-jedi', { 'for': 'python' }
-" " Plug 'takkii/ruby-dictionary3', { 'for': 'ruby' }
-" Plug 'takkii/Bignyanco', { 'for': 'ruby' }
-" Plug 'mhartington/nvim-typescript', { 'for': 'typescript', 'do': './install.sh' }
-" Plug 'shougo/neco-vim', { 'for': 'vim' }
-"}}}
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+
 
 "------------------+
 " Colorschemes   {{{
@@ -230,6 +223,13 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 	let g:Lf_ShortcutF = '<C-P>'
 
  Plug 'scrooloose/nerdtree'
+ Plug 'Xuyuanp/nerdtree-git-plugin'
+ 	autocmd StdinReadPre * let s:std_in=1
+	nnoremap <C-f> :NERDTreeToggle<Enter>
+	let NERDTreeQuitOnOpen = 1
+	let NERDTreeMinimalUI = 1
+	let NERDTreeDirArrows = 1
+
 
 "}}}
 
@@ -245,8 +245,13 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 	"}}}
 
 	" HTML/XML/CSS -----------{{{
-	Plug 'mattn/emmet-vim', { 'for': ['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache'] }
-	Plug 'othree/html5.vim', {'for': ['html'] }
+	" Plug 'mattn/emmet-vim', { 'for': ['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache','jsx', 'erb'] }
+	Plug 'mattn/emmet-vim'
+		let g:user_emmet_leader_key='<C-k>'
+
+
+
+	Plug 'othree/html5.vim'
 	"}}}
 
 	" Ruby -------------------{{{
@@ -522,7 +527,7 @@ set numberwidth=4
 set ruler
 
 " Tenths of a second to show matching parentheses
-set matchtime=2
+" set matchtime=2
 
 " Shows matching brackets when text indicator is over them
 set showmatch
@@ -856,7 +861,7 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	au BufNewFile,BufRead *.jsm setlocal ft=javascript
 	au BufNewFile,BufRead Jakefile setlocal ft=javascript
-	au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+	au FileType javascript setlocal ts=3 sts=3 sw=3 noexpandtab
 	au FileType javascript setlocal nocindent
 
 	" JSON syntax
@@ -959,6 +964,22 @@ augroup END "}}}
 "----------------------------------------------------------------------------//
 " HELPER FUNCTIONS                                                          {{{
 "----------------------------------------------------------------------------//
+
+function s:MkNonExDir(file, buf) "{{{
+	" Creates a directory if there is none
+	if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+		let dir=fnamemodify(a:file, ':h')
+		if !isdirectory(dir)
+			call mkdir(dir, 'p')
+		endif
+	endif
+endfunction
+augroup BWCCreateDir
+	autocmd!
+	autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+augroup END
+"}}}
+"
 " function! FoldText_PHP() "{{{
 " 	" This function uses code from phpfolding.vim
 " 	let l:curline = v:foldstart
@@ -1216,17 +1237,17 @@ endfunction "}}}
 " 	return ''
 " endfunction "}}}
 
-function! HLNext (blinktime) "{{{
-	highlight WhiteOnRed ctermfg=white ctermbg=red
-	let [bufnum, lnum, col, off] = getpos('.')
-	let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
-	let target_pat = '\c\%#'.@/
-	let ring = matchadd('WhiteOnRed', target_pat, 101)
-	redraw
-	exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
-	call matchdelete(ring)
-	redraw
-endfunction "}}}
+" function! HLNext (blinktime) "{{{
+" 	highlight WhiteOnRed ctermfg=white ctermbg=red
+" 	let [bufnum, lnum, col, off] = getpos('.')
+" 	let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+" 	let target_pat = '\c\%#'.@/
+" 	let ring = matchadd('WhiteOnRed', target_pat, 101)
+" 	redraw
+" 	exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+" 	call matchdelete(ring)
+" 	redraw
+" endfunction "}}}
 
 function! GetCwd() "{{{
 	let currentdir = substitute(getcwd(), expand("$home"), "~", "g")
