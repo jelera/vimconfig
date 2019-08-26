@@ -2,6 +2,7 @@
 .netrwhist
 tags*
 bundle
+plugged
 .cache/
 spell/
 .directory
