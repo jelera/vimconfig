@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Wed 15 May 2019 10:57:47 AM CDT
+" Last Updated: Wed 21 Aug 2019 11:59:44 AM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -74,18 +74,31 @@ Plug 'mhinz/vim-startify'
 "------------------+
 " Text helpers   {{{
 "------------------+
+Plug 'editorconfig/editorconfig-vim'
+
 Plug 'tpope/vim-fugitive' " {{{
 	" automatically delete fugitive buffers when leaving them
 	autocmd BufReadPost fugitive://* setlocal bufhidden=delete
 "}}}
 Plug 'w0rp/ale' " {{{
 	let g:airline#extensions#ale#enabled = 1
-	let g:ale_sign_error = '>>'
-	let g:ale_sign_warning = '!-'
+	let g:ale_sign_error = '❗ '
+	let g:ale_sign_warning = '⚠️  '
 	let g:ale_set_highlights = 0
 	let g:ale_echo_msg_error_str = 'E'
 	let g:ale_echo_msg_warning_str = 'W'
 	let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+
+	let g:ale_fixers = {'javascript': ['prettier-standard']}
+	let g:ale_linters = {
+				\ 'javascript': ['standard']
+	\}
+	" let g:ale_linters = {
+	" 			\ 'javascript': ['standard']
+	" \}
+	" let g:ale_fixers = {'javascript': ['standard']}
+	let g:ale_lint_on_save = 1
+	let g:ale_lint_on_save = 1
 "}}}
 " Track the engine.
 "Plug 'SirVer/ultisnips' " {{{
@@ -237,8 +250,8 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 " Filetype       {{{
 "------------------+
 	" JavaScript, JSON, ES6, JSX -------------{{{
-	Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
 	Plug 'mxw/vim-jsx'
+	Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
 	Plug 'vim-scripts/JavaScript-Indent', { 'for': 'javascript' }
 	Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
 	Plug 'elzr/vim-json', { 'for': ['javascript', 'json', 'javascript.jsx'] }
@@ -861,7 +874,7 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	au BufNewFile,BufRead *.jsm setlocal ft=javascript
 	au BufNewFile,BufRead Jakefile setlocal ft=javascript
-	au FileType javascript setlocal ts=3 sts=3 sw=3 noexpandtab
+	au FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
 	au FileType javascript setlocal nocindent
 
 	" JSON syntax
