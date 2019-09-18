@@ -879,7 +879,7 @@ augroup Filetype Specific         "{{{
 	au BufNewFile,BufRead *.jsm setlocal ft=javascript
 	au BufNewFile,BufRead Jakefile setlocal ft=javascript
 	au FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
-	au FileType javascript setlocal nocindent
+	" au FileType javascript setlocal nocindent
 
 	" JSON syntax
 	au BufRead,BufNewFile *.json setlocal ft=json
@@ -932,6 +932,7 @@ augroup Filetype Specific         "{{{
 	" Python         {{{
 	"------------------+
 	au FileType python setlocal nocindent
+	au BufNewFile,BufRead *.py setlocal ts=4 sts=4 sw=4 expandtab autoindent textwidth=79
 	au BufNewFile,BufRead *.jinja setlocal syntax=htmljinja
 	au BufNewFile,BufRead *.mako setlocal ft=mako
 	" }}}
