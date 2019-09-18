@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Wed 21 Aug 2019 11:59:44 AM CDT
+" Last Updated: Tue 17 Sep 2019 05:49:44 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -87,18 +87,17 @@ Plug 'w0rp/ale' " {{{
 	let g:ale_set_highlights = 0
 	let g:ale_echo_msg_error_str = 'E'
 	let g:ale_echo_msg_warning_str = 'W'
-	let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+	let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
 
-	let g:ale_fixers = {'javascript': ['prettier-standard']}
-	let g:ale_linters = {
-				\ 'javascript': ['standard']
+	let g:ale_fixers = {
+				\ 'javascript': ['prettier'],
+				\ 'css': ['prettier']
 	\}
-	" let g:ale_linters = {
-	" 			\ 'javascript': ['standard']
-	" \}
-	" let g:ale_fixers = {'javascript': ['standard']}
+	let g:ale_linters = {
+				\ 'javascript': ['prettier']
+	\}
 	let g:ale_lint_on_save = 1
-	let g:ale_lint_on_save = 1
+	let g:ale_fix_on_save = 1
 "}}}
 " Track the engine.
 "Plug 'SirVer/ultisnips' " {{{
