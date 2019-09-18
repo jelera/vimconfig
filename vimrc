@@ -110,10 +110,10 @@ Plug 'w0rp/ale' " {{{
 "	let g:UltiSnipsEditSplit="vertical"
 ""}}}
 Plug 'honza/vim-snippets'
-Plug 'git@github.com:jelera/vim-template' "{{{
-	let g:username = "Jose Elera"
-	let g:email = "jelera@gmail.com"
-"}}}
+"Plug 'git@github.com:jelera/vim-template' "{{{
+"	let g:username = "Jose Elera"
+"	let g:email = "jelera@gmail.com"
+""}}}
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-endwise'
 Plug 'tmux-plugins/vim-tmux-focus-events'
@@ -235,12 +235,12 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 	let g:Lf_ShortcutF = '<C-P>'
 
  Plug 'scrooloose/nerdtree'
- Plug 'Xuyuanp/nerdtree-git-plugin'
- 	autocmd StdinReadPre * let s:std_in=1
-	nnoremap <C-f> :NERDTreeToggle<Enter>
-	let NERDTreeQuitOnOpen = 1
-	let NERDTreeMinimalUI = 1
-	let NERDTreeDirArrows = 1
+ " Plug 'Xuyuanp/nerdtree-git-plugin'
+ " 	autocmd StdinReadPre * let s:std_in=1
+	" nnoremap <C-f> :NERDTreeToggle<Enter>
+	" let NERDTreeQuitOnOpen = 1
+	" let NERDTreeMinimalUI = 1
+	" let NERDTreeDirArrows = 1
 
 
 "}}}
@@ -251,7 +251,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 	" JavaScript, JSON, ES6, JSX -------------{{{
 	Plug 'mxw/vim-jsx'
 	Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
-	Plug 'vim-scripts/JavaScript-Indent', { 'for': 'javascript' }
+	" Plug 'vim-scripts/JavaScript-Indent', { 'for': 'javascript' }
 	Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
 	Plug 'elzr/vim-json', { 'for': ['javascript', 'json', 'javascript.jsx'] }
 	"}}}
