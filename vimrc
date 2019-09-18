@@ -277,6 +277,11 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 		let vim_markdown_preview_github=1
 	"}}}
 
+	" Python ---------------{{{
+	Plug 'vim-python/python-syntax'
+	let g:python_highlight_all = 1
+	"}}}
+
 ""}}}
 
 " Initialize plugin system
