@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Tue 17 Sep 2019 05:49:44 PM CDT
+" Last Updated: Sun 27 Oct 2019 04:04:03 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -89,6 +89,10 @@ Plug 'w0rp/ale' " {{{
 	let g:ale_echo_msg_warning_str = 'W'
 	let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
 
+	" This is a temporary fix for the dissapearing cursor bug in the Vim
+	" package from Ubuntu 18.04
+	" let g:ale_echo_cursor = 0
+
 	let g:ale_fixers = {
 				\ 'javascript': ['prettier'],
 				\ 'css': ['prettier']
@@ -144,7 +148,7 @@ let g:coc_snippet_next = '<tab>'
 " Colorschemes   {{{
 "------------------+
 Plug 'git@github.com:jelera/vim-hybrid.git'
-Plug 'chriskempson/base16-vim'
+" Plug 'chriskempson/base16-vim'
 Plug 'NLKNguyen/papercolor-theme'
 "}}}
 
@@ -483,6 +487,7 @@ highlight ColorColumn ctermbg=235 guibg=#2c2d27
 "}}}
 
 colorscheme PaperColor
+set background=dark
 
 if has('gui_running')
 " GVIM / MacVim"{{{
@@ -494,25 +499,25 @@ if has('gui_running')
 		set guifont=Fira\ Code:h14
 	else
 		" For Linux gVim
-		set guifont=Fura\ Mono\ for\ Powerline\ 10
-		" set guifont=Fura\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types\ Plus\ Font\ Awesome\ Plus\ Octicons\ Plus\ Pomicons\ 10
+		set guifont=Fira\ Code\ 12
 endif
 "}}}
 else
 " Terminal Vim"{{{
-	if $COLORTERM == 'gnome-terminal'
-		set t_Co=256 "why you no tell me correct colors?!?!
-	endif
-	if $TERM_PROGRAM == 'iTerm.app'
-		" different cursors for insert vs normal mode
-		" if exists('$TMUX')
-		" 	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-		" 	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-		" else
-		" 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-		" 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-		" endif
-	endif
+set t_Co=256 "why you no tell me correct colors?!?!
+if $COLORTERM == 'gnome-terminal'
+	set t_Co=256 "why you no tell me correct colors?!?!
+endif
+if $TERM_PROGRAM == 'iTerm.app'
+	" different cursors for insert vs normal mode
+	" if exists('$TMUX')
+	" 	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+	" 	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+	" else
+	" 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+	" 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+	" endif
+endif
 "}}}
 endif
 
@@ -745,11 +750,9 @@ iab becuas because
 " Programming Abbreviations       "{{{
 "------------------------------------+
 iab #e   #!/usr/bin/env
-iab #pl  #!/usr/bin/env perl
-iab #py  #!/usr/bin/env python
-iab #py3 #!/usr/bin/env python3
-iab #rb  #!/usr/bin/env ruby
-iab #sh  #!/usr/bin/env bash
+iab #py  #!/usr/bin/python
+iab #rb  #!/usr/bin/ruby
+iab #sh  #!/bin/bash
 "}}}
 
 "------------------------------------+
@@ -934,7 +937,6 @@ augroup Filetype Specific         "{{{
 	au FileType python setlocal nocindent
 	au BufNewFile,BufRead *.py setlocal ts=4 sts=4 sw=4 expandtab autoindent textwidth=79
 	au BufNewFile,BufRead *.jinja setlocal syntax=htmljinja
-	au BufNewFile,BufRead *.mako setlocal ft=mako
 	" }}}
 
 	"------------------+
