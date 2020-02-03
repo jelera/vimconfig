@@ -8,14 +8,14 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Sun 27 Oct 2019 04:04:03 PM CDT
+" Last Updated: Sun 02 Feb 2020 10:03:48 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
 "               to experiment with your own mappings, plugins and configs.
 "
 "      License: MIT
-"               Copyright (c) 2019 Jose Elera
+"               Copyright (c) 2020 Jose Elera
 "
 "               Permission is hereby granted, free of charge, to any person
 "               obtaining a copy of this software and associated documentation
@@ -61,88 +61,137 @@ Plug 'vim-airline/vim-airline' "{{{
 Plug 'vim-airline/vim-airline-themes'
 	let g:airline_powerline_fonts = 1
 	let g:airline_theme = "tomorrow"
-	let g:airlne_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
+	" let g:airlne_section_c = '%t %{GetFileSize()} (%{GetCwd()})'
+	let g:airlne_section_c = '%t (%{GetCwd()})'
+"}}}
+Plug 'Yggdroot/indentLine'"{{{
+	let g:indentLine_char_list = ['┊']
+	let g:indentLine_enabled = 1
 "}}}
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-projectionist'
 Plug 'mhinz/vim-signify'
 Plug 'mhinz/vim-startify'
+Plug 'valloric/MatchTagAlways' "{{{
+	let g:mta_filetypes = {
+		\ 'javascript.jsx' : 1,
+		\ 'erb' : 1
+		\}
+"}}}
 "}}}
 
-"------------------+
-" Text helpers   {{{
-"------------------+
-Plug 'editorconfig/editorconfig-vim'
+Plug 'SirVer/ultisnips'
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
-Plug 'tpope/vim-fugitive' " {{{
-	" automatically delete fugitive buffers when leaving them
-	autocmd BufReadPost fugitive://* setlocal bufhidden=delete
-"}}}
-Plug 'w0rp/ale' " {{{
-	let g:airline#extensions#ale#enabled = 1
-	let g:ale_sign_error = '❗ '
-	let g:ale_sign_warning = '⚠️  '
-	let g:ale_set_highlights = 0
-	let g:ale_echo_msg_error_str = 'E'
-	let g:ale_echo_msg_warning_str = 'W'
-	let g:ale_echo_msg_format = '[%linter%] [%severity%] %s'
-
-	" This is a temporary fix for the dissapearing cursor bug in the Vim
-	" package from Ubuntu 18.04
-	" let g:ale_echo_cursor = 0
-
-	let g:ale_fixers = {
-				\ 'javascript': ['prettier'],
-				\ 'css': ['prettier']
-	\}
-	let g:ale_linters = {
-				\ 'javascript': ['prettier']
-	\}
-	let g:ale_lint_on_save = 1
-	let g:ale_fix_on_save = 1
-"}}}
-" Track the engine.
-"Plug 'SirVer/ultisnips' " {{{
-"	" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-"	let g:UltiSnipsExpandTrigger="<tab>"
-"	let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"	let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-"	" If you want :UltiSnipsEdit to split your window.
-"	let g:UltiSnipsEditSplit="vertical"
-""}}}
 Plug 'honza/vim-snippets'
-"Plug 'git@github.com:jelera/vim-template' "{{{
-"	let g:username = "Jose Elera"
-"	let g:email = "jelera@gmail.com"
-""}}}
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-endwise'
-Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'jiangmiao/auto-pairs'
-"}}}
-
+Plug 'epilande/vim-es2015-snippets'
+Plug 'epilande/vim-react-snippets'
 "------------------+
 " Autocompletion {{{
 "------------------+
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other
+" plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+      \ pumvisible() ? "\<C-n>" :
+			\ <SID>check_back_space() ? "\<TAB>" :
+			\ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-let g:coc_snippet_next = '<tab>'
+" let g:coc_snippet_next = '<tab>'
 
+
+"Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position.
+" " Coc only does snippet and additional edit on confirm.
+" inoremap <C-R>=pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" " Or use `complete_info` if your vim support it, like:
+
+" SNIPPETS
+" " Use <C-l> for trigger snippet expand.
+" imap <C-l> <Plug>(coc-snippets-expand)
+
+" " Use <C-j> for select text for visual placeholder of snippet.
+" vmap <C-j> <Plug>(coc-snippets-select)
+
+" " Use <C-j> for jump to next placeholder, it's default of coc.nvim
+" let g:coc_snippet_next = '<c-j>'
+
+" " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+" let g:coc_snippet_prev = '<c-k>'
+
+" " Use <C-j> for both expand and jump (make expand higher priority.)
+" imap <C-j> <Plug>(coc-snippets-expand-jump)
+"}}}
+
+"------------------+
+" Text helpers   {{{
+"------------------+
+Plug 'editorconfig/editorconfig-vim'
+Plug 'wellle/targets.vim'
+Plug 'tpope/vim-fugitive' " {{{
+	" automatically delete fugitive buffers when leaving them
+	autocmd BufReadPost fugitive://* setlocal bufhidden=delete
+"}}}
+Plug 'dense-analysis/ale' " {{{
+	let g:airline#extensions#ale#enabled = 1
+	let g:ale_sign_column_always = 1
+	let g:ale_sign_error = '❗ '
+	let g:ale_sign_warning = '⚠️  '
+	let g:ale_set_highlights = 0
+	let g:ale_echo_msg_error_str = '❗'
+	let g:ale_echo_msg_warning_str = '⚠️ '
+	let g:ale_echo_msg_format = '[%linter%] %severity% %s'
+
+	let g:ale_fixers = {
+				\ '*': ['remove_trailing_lines', 'trim_whitespace'],
+				\ 'javascript': ['prettier', 'eslint'],
+				\ 'javascript.jsx': ['prettier', 'eslint'],
+				\ 'html': ['prettier'],
+				\ 'css': ['prettier']
+	\}
+
+	let g:ale_linter_aliases = {'jsx': ['css', 'javascript']}
+
+	let g:ale_linters = {
+				\ 'javascript': ['eslint'],
+				\ 'jsx' : ['eslint']
+	\}
+	let g:ale_lint_on_save = 1
+	let g:ale_fix_on_save = 1
+"}}}
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-endwise' "{{{
+" disable mapping to not break coc.nvim
+let g:endwise_no_mappings = 1
+"}}}
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'jiangmiao/auto-pairs'
+Plug 'alvan/vim-closetag' "{{{
+	let g:closetag_filetypes = 'html,xhtml,erb,jsx'
+"}}}
+Plug 'vim-scripts/matchit.zip'
+"}}}
 
 "------------------+
 " Colorschemes   {{{
@@ -155,8 +204,10 @@ Plug 'NLKNguyen/papercolor-theme'
 "------------------+
 " Navigation     {{{
 "------------------+
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
-	nnoremap <silent> <leader><leader>t :TagbarToggle<CR>
+"Plug 'ludovicchabant/vim-gutentags'
+Plug 'majutsushi/tagbar' "{{{
+	" nnoremap <silent> <leader><leader>t :TagbarToggle<CR>
+	let g:tagbar_ctags_bin = '/snap/bin/ctags'
 	let g:tagbar_type_markdown = {
 	\ 'ctagstype' : 'markdown',
 	\ 'kinds' : [
@@ -235,16 +286,32 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 	\ }
 "}}}
 
- Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-	let g:Lf_ShortcutF = '<C-P>'
-
- Plug 'scrooloose/nerdtree'
- " Plug 'Xuyuanp/nerdtree-git-plugin'
- " 	autocmd StdinReadPre * let s:std_in=1
-	" nnoremap <C-f> :NERDTreeToggle<Enter>
-	" let NERDTreeQuitOnOpen = 1
-	" let NERDTreeMinimalUI = 1
-	" let NERDTreeDirArrows = 1
+ "Plug 'Yggdroot/LeaderF', { 'do': './install.sh' } "{{{
+	"let g:Lf_ShortcutF = '<C-P>'
+""}}}
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }"{{{
+Plug 'junegunn/fzf.vim'
+	nnoremap <silent> <C-P> :FZF<Enter>
+"}}}
+Plug 'scrooloose/nerdtree' "{{{
+ Plug 'Xuyuanp/nerdtree-git-plugin'
+ 	autocmd StdinReadPre * let s:std_in=1
+	nnoremap <C-T> :NERDTreeToggle<Enter>
+	let g:NERDTreeIndicatorMapCustom = {
+		\ "Modified"  : "M",
+		\ "Staged"    : "✚",
+		\ "Untracked" : "✭",
+		\ "Renamed"   : "➜",
+		\ "Unmerged"  : "═",
+		\ "Deleted"   : "✖",
+		\ "Dirty"     : "✗",
+		\ "Clean"     : "✔︎",
+		\ 'Ignored'   : '☒',
+		\ "Unknown"   : "?"
+		\ }
+	let NERDTreeQuitOnOpen = 1
+	let NERDTreeMinimalUI = 1
+	let NERDTreeDirArrows = 1
 
 
 "}}}
@@ -253,8 +320,8 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 " Filetype       {{{
 "------------------+
 	" JavaScript, JSON, ES6, JSX -------------{{{
-	Plug 'mxw/vim-jsx'
 	Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
+	Plug 'mxw/vim-jsx'
 	" Plug 'vim-scripts/JavaScript-Indent', { 'for': 'javascript' }
 	Plug 'ternjs/tern_for_vim', { 'for': 'javascript' }
 	Plug 'elzr/vim-json', { 'for': ['javascript', 'json', 'javascript.jsx'] }
@@ -263,7 +330,7 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 	" HTML/XML/CSS -----------{{{
 	" Plug 'mattn/emmet-vim', { 'for': ['html','xml','xsl','xslt','xsd','css','sass','scss','less','mustache','jsx', 'erb'] }
 	Plug 'mattn/emmet-vim'
-		let g:user_emmet_leader_key='<C-k>'
+	let g:user_emmet_leader_key='<C-E>'
 
 
 
@@ -277,10 +344,10 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 
 	" Markdown ---------------{{{
 	Plug 'tpope/vim-markdown'
-	Plug 'JamshedVesuna/vim-markdown-preview'
-		let vim_markdown_preview_github=1
-	"}}}
-
+	"Plug 'JamshedVesuna/vim-markdown-preview'
+	"	let vim_markdown_preview_github=1
+	""}}}
+	Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 	" Python ---------------{{{
 	Plug 'vim-python/python-syntax'
 	let g:python_highlight_all = 1
@@ -288,14 +355,19 @@ Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' } "{{{
 
 ""}}}
 
+" This plugin has the last one to load
+Plug 'ryanoasis/vim-devicons'
+"
 " Initialize plugin system
 call plug#end()
 
 filetype plugin indent on " Required!
 
 "}}}
+
 "}}}
 
+"}}}
 
 "----------------------------------------------------------------------------//
 " BASIC CONFIGURATION                                                       {{{
@@ -306,6 +378,7 @@ set title
 set hidden
 syntax on
 set nomodeline
+
 
 " This will setup the user's shell
 " $PATH to vim/gvim/macvim
@@ -441,21 +514,20 @@ set completeopt=menu,menuone,longest
 " As seen in http://robots.thoughtbot.com/faster-grepping-in-vim/
 
 " Use ag instead of grep
-if executable('ag')
-	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-	set grepformat=%f:%l:%c:%m
-endif
+" if executable('ag')
+" 	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+" 	set grepformat=%f:%l:%c:%m
+" endif
 
 " Search the word under the cursor with K
 " nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 " bind \ (backward slash) to grep shortcut
-command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!"
-nnoremap \ :Ag<SPACE>
+" command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!"
+" nnoremap \ :Ag<SPACE>
 "}}}
 
-"}}}}}}
-
+"}}}
 
 "----------------------------------------------------------------------------//
 " FOLDING                                                                   {{{
@@ -610,8 +682,8 @@ set smartindent
 "------------------------------------+
 " Tab Options                      {{{
 "------------------------------------+
-set shiftwidth=4
-set tabstop=4
+set shiftwidth=2
+set tabstop=2
 set smarttab
 set noexpandtab
 "}}}
@@ -628,16 +700,16 @@ set noexpandtab
 nnoremap <silent> <Leader><space> :nohlsearch<CR>
 
 " Show Invisible Characters
-nmap <Leader>l :set list!<CR>
+nnoremap <Leader>l :set list!<CR>
 
 " Toggle Foldings with the space bar
 nnoremap <Space> za
 
 " Indent visual selected code without unselecting
 " As seen in vimcasts.org
-vmap > >gv
-vmap < <gv
-vmap = =gv
+vnoremap > >gv
+vnoremap < <gv
+vnoremap = =gv
 
 " Show syntax highlighting groups for word under cursor
 nnoremap <Leader>syn :call <SID>SynStack()<CR>
@@ -657,19 +729,16 @@ nnoremap <leader>nw :%s/\s\+$//e<cr>:let @/=''<CR>
 " Autocomplete {} indent and reposition of the cursor in the middle
 " inoremap <silent> <CR> <C-R>=EnterIndent()<CR>
 
-" Expand Compressed HTML with Tidy
-map <leader>td :%!tidy -q -config ~/.vim/tidy.conf --tidy-mark 0 2>/dev/null<CR><ESC>gg=G
-
 " Documentation Writing and Formatting
-map <leader>h1 yypVr=o
-map <leader>h2 yypVr-o
+noremap <leader>h1 yypVr=o
+noremap <leader>h2 yypVr-o
 "}}}
 
 "------------------------------------+
 " Copy, Cut, Paste and Blockwise   {{{
 "------------------------------------+
 " Use CTRL-Q to do what CTRL-V used to do, Blockwise Visual Selection
-noremap <C-Q>   <C-V>
+noremap <C-Q> <C-V>
 
 " CTRL-X is cut
 vnoremap <C-X> "+x
@@ -717,15 +786,15 @@ au FileType mail,text,markdown au BufEnter,BufWinEnter <buffer> setlocal spell
 " sdate : 2013-12-06
 
 " RFC822 date format"
-iab <expr> rdate strftime("%a, %d %b %Y %H:%M:%S %z")
-iab <expr> xdate strftime("%a %d %b %Y %I:%M:%S %p %Z")
+" iab <expr> rdate strftime("%a, %d %b %Y %H:%M:%S %z")
+" iab <expr> xdate strftime("%a %d %b %Y %I:%M:%S %p %Z")
 
-" American date format"
-iab adate <C-R>=strftime("%b %d, %Y")<cr>
+" " American date format"
+" iab adate <C-R>=strftime("%b %d, %Y")<cr>
 
-" Short date format YYYY-MM-DD
-iab ldate <C-R>=strftime("%Y-%m-%d %H:%M:%S")<cr>
-iab sdate <C-R>=strftime("%Y-%m-%d")<cr>
+" " Short date format YYYY-MM-DD
+" iab ldate <C-R>=strftime("%Y-%m-%d %H:%M:%S")<cr>
+" iab sdate <C-R>=strftime("%Y-%m-%d")<cr>
 "}}}
 
 "------------------------------------+
@@ -855,7 +924,7 @@ augroup Filetype Specific         "{{{
 		if has("mac")
 			exec "!markdown % > /tmp/preview.html && open /tmp/preview.html"
 		else
-			exec "!markdown % > /tmp/preview.html && firefox /tmp/preview.html"
+			exec "!markdown % > /tmp/preview.html && xdg-open /tmp/preview.html"
 		endif
 	endfunction
 
@@ -868,27 +937,31 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	" for HTML, generally format text, but if a long line has been created
 	" leave it alone when editing:
-	autocmd FileType html,xhtml setlocal formatoptions+=tl
+	" autocmd FileType html,xhtml setlocal formatoptions+=tl
 	autocmd FileType html,xhtml setlocal textwidth=0
 	autocmd FileType html,xhtml setlocal noexpandtab tabstop=3 shiftwidth=3
+	" autocmd FileType html,xhtml setlocal equalprg=prettier\ --parser\ html\ --stdin\ --tab-width\ 2
 
 	" Load the Current buffer in default web browser of Firefox
 	au Filetype html,xhtml nmap <silent> <leader>pv : call PreviewInBrowser()<CR>
 	" }}}
 
 	"------------------+
-	" Javascript     {{{
+	" JavaScript     {{{
 	"------------------+
 	au BufNewFile,BufRead *.jsm setlocal ft=javascript
 	au BufNewFile,BufRead Jakefile setlocal ft=javascript
-	au FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+	au FileType javascript,javascript.jsx setlocal ts=2 sts=2 sw=2 noexpandtab
 	" au FileType javascript setlocal nocindent
 
 	" JSON syntax
 	au BufRead,BufNewFile *.json setlocal ft=json
+	autocmd FileType javascript,javascript.jsx setlocal formatprg=prettier\
+																															\--stdin\
+																															\--print-width\ 80\
+																															\--single-quote\
+																															\--trailing-comma\ es5
 
-	" Expand compressed (minified) Javascript with JSBeautify.vim
-	au FileType javascript nmap <leader>jsb : call g:Jsbeautify()<CR>
 	" }}}
 
 	"------------------+
@@ -897,6 +970,8 @@ augroup Filetype Specific         "{{{
 	autocmd FileType css setlocal smartindent
 	autocmd FileType css setlocal noexpandtab tabstop=2 shiftwidth=2
 	autocmd FileType css map <leader>css %s/{\_.\{-}}/\=substitute(submatch(0), '\n', '', 'g')/
+	autocmd FileType css setlocal equalprg=prettier\ --parser\ css\ --stdin\ --tab-width\ 2
+
 	" autocmd filetype css setlocal equalprg=csstidy\ -\ --silent=true
 	" }}}
 
@@ -929,6 +1004,12 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	au FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
 	au FileType eruby setlocal ts=2 sts=2 sw=2 expandtab
+	" }}}
+
+	"------------------+
+	" Yaml           {{{
+	"------------------+
+	au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 	" }}}
 
 	"------------------+
