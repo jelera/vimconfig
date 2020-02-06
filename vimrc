@@ -206,10 +206,10 @@ Plug 'NLKNguyen/papercolor-theme'
 "------------------+
 " Navigation     {{{
 "------------------+
-"Plug 'ludovicchabant/vim-gutentags'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar' "{{{
 	" nnoremap <silent> <leader><leader>t :TagbarToggle<CR>
-	let g:tagbar_ctags_bin = '/snap/bin/ctags'
+	" let g:tagbar_ctags_bin = '/usr/bin/ctags'
 	let g:tagbar_type_markdown = {
 	\ 'ctagstype' : 'markdown',
 	\ 'kinds' : [
