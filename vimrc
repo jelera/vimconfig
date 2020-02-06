@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Sun 02 Feb 2020 10:03:48 PM CST
+" Last Updated: Wed 05 Feb 2020 10:44:34 AM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -72,6 +72,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-dadbod'
+Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-projectionist'
 Plug 'mhinz/vim-signify'
 Plug 'mhinz/vim-startify'
