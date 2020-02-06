@@ -341,6 +341,11 @@ Plug 'scrooloose/nerdtree' "{{{
 
 	" Ruby -------------------{{{
 	Plug 'vim-ruby/vim-ruby'
+	Plug 'vim-utils/vim-ruby-fold' "{{{
+	let g:ruby_fold_lines_limit = 200
+"}}}
+	Plug 'tpope/vim-rake'
+	Plug 'tpope/vim-bundler'
 	Plug 'tpope/vim-rails'
 	"}}}
 
@@ -371,6 +376,7 @@ filetype plugin indent on " Required!
 
 "}}}
 
+set autochdir
 "----------------------------------------------------------------------------//
 " BASIC CONFIGURATION                                                       {{{
 "------------------------------------+---------------------------------------//
