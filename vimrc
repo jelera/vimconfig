@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Wed 05 Feb 2020 10:44:34 AM CST
+" Last Updated: Tue 18 Feb 2020 09:52:54 AM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -86,6 +86,7 @@ Plug 'valloric/MatchTagAlways' "{{{
 "}}}
 
 Plug 'SirVer/ultisnips'
+let g:UltiSnipsExpandTrigger="F10"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
@@ -95,7 +96,6 @@ Plug 'epilande/vim-react-snippets'
 "------------------+
 " Autocompletion {{{
 "------------------+
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 set updatetime=300
@@ -115,8 +115,9 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" let g:coc_snippet_next = '<tab>'
-
+" Navigate snippet placeholders using tab
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
 
 "Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
@@ -148,6 +149,10 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 "------------------+
 " Text helpers   {{{
 "------------------+
+Plug 'vim-scripts/matchit.zip'
+" Plug 'kana/vim-textobj-user'
+" Plug 'nelstrom/vim-textobj-rubyblock'
+
 Plug 'editorconfig/editorconfig-vim'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-fugitive' " {{{
@@ -192,7 +197,6 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag' "{{{
 	let g:closetag_filetypes = 'html,xhtml,erb,jsx'
 "}}}
-Plug 'vim-scripts/matchit.zip'
 "}}}
 
 "------------------+
@@ -376,7 +380,7 @@ filetype plugin indent on " Required!
 
 "}}}
 
-set autochdir
+" set autochdir
 "----------------------------------------------------------------------------//
 " BASIC CONFIGURATION                                                       {{{
 "------------------------------------+---------------------------------------//
