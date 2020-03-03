@@ -212,85 +212,87 @@ Plug 'NLKNguyen/papercolor-theme'
 " Navigation     {{{
 "------------------+
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'majutsushi/tagbar' "{{{
-	" nnoremap <silent> <leader><leader>t :TagbarToggle<CR>
-	" let g:tagbar_ctags_bin = '/usr/bin/ctags'
-	let g:tagbar_type_markdown = {
-	\ 'ctagstype' : 'markdown',
-	\ 'kinds' : [
-		\ 'h:Heading_L1',
-		\ 'i:Heading_L2',
-		\ 'k:Heading_L3'
-	\ ]
-	\ }
-	let g:tagbar_type_css = {
-	\ 'ctagstype' : 'Css',
-	\ 'kinds' : [
-		\ 'c:classes',
-		\ 's:selectors',
-		\ 'i:identities'
-	\ ]
-	\ }
-	let g:tagbar_type_javascript = {
-	      \ 'ctagstype': 'javascript',
-	      \ 'ctagsbin': 'jsctags',
-	      \ 'kinds': [
-	      \ 'A:arrays',
-	      \ 'P:properties',
-	      \ 'T:tags',
-	      \ 'O:objects',
-	      \ 'G:generator functions',
-	      \ 'F:functions',
-	      \ 'C:constructors/classes',
-	      \ 'M:methods',
-	      \ 'V:variables',
-	      \ 'I:imports',
-	      \ 'E:exports',
-	      \ 'S:styled components'
-      	\ ]}
-	let g:tagbar_type_ruby = {
-	\ 'kinds' : [
-		\ 'm:modules',
-		\ 'c:classes',
-		\ 'd:describes',
-		\ 'C:contexts',
-		\ 'f:methods',
-		\ 'F:singleton methods'
-	\ ]
-	\ }
-	if executable('ripper-tags')
-	  let g:tagbar_type_ruby = {
-	      \ 'kinds'      : ['m:modules',
-			      \ 'c:classes',
-			      \ 'C:constants',
-			      \ 'F:singleton methods',
-			      \ 'f:methods',
-			      \ 'a:aliases'],
-	      \ 'kind2scope' : { 'c' : 'class',
-			       \ 'm' : 'class' },
-	      \ 'scope2kind' : { 'class' : 'c' },
-	      \ 'ctagsbin'   : 'ripper-tags',
-	      \ 'ctagsargs'  : ['-f', '-']
-	      \ }
-	endif
-	let g:tagbar_type_typescript = {
-	  \ 'ctagsbin' : 'tstags',
-	  \ 'ctagsargs' : '-f-',
-	  \ 'kinds': [
-	    \ 'e:enums:0:1',
-	    \ 'f:function:0:1',
-	    \ 't:typealias:0:1',
-	    \ 'M:Module:0:1',
-	    \ 'I:import:0:1',
-	    \ 'i:interface:0:1',
-	    \ 'C:class:0:1',
-	    \ 'm:method:0:1',
-	    \ 'p:property:0:1',
-	    \ 'v:variable:0:1',
-	    \ 'c:const:0:1',
-	  \ ],
-	  \ 'sort' : 0
-	\ }
+Plug 'liuchengxu/vista.vim'
+
+" Plug 'majutsushi/tagbar' "{{{
+" 	" nnoremap <silent> <leader><leader>t :TagbarToggle<CR>
+" 	" let g:tagbar_ctags_bin = '/usr/bin/ctags'
+" 	let g:tagbar_type_markdown = {
+" 	\ 'ctagstype' : 'markdown',
+" 	\ 'kinds' : [
+" 		\ 'h:Heading_L1',
+" 		\ 'i:Heading_L2',
+" 		\ 'k:Heading_L3'
+" 	\ ]
+" 	\ }
+" 	let g:tagbar_type_css = {
+" 	\ 'ctagstype' : 'Css',
+" 	\ 'kinds' : [
+" 		\ 'c:classes',
+" 		\ 's:selectors',
+" 		\ 'i:identities'
+" 	\ ]
+" 	\ }
+" 	let g:tagbar_type_javascript = {
+" 	      \ 'ctagstype': 'javascript',
+" 	      \ 'ctagsbin': 'jsctags',
+" 	      \ 'kinds': [
+" 	      \ 'A:arrays',
+" 	      \ 'P:properties',
+" 	      \ 'T:tags',
+" 	      \ 'O:objects',
+" 	      \ 'G:generator functions',
+" 	      \ 'F:functions',
+" 	      \ 'C:constructors/classes',
+" 	      \ 'M:methods',
+" 	      \ 'V:variables',
+" 	      \ 'I:imports',
+" 	      \ 'E:exports',
+" 	      \ 'S:styled components'
+"       	\ ]}
+" 	let g:tagbar_type_ruby = {
+" 	\ 'kinds' : [
+" 		\ 'm:modules',
+" 		\ 'c:classes',
+" 		\ 'd:describes',
+" 		\ 'C:contexts',
+" 		\ 'f:methods',
+" 		\ 'F:singleton methods'
+" 	\ ]
+" 	\ }
+" 	if executable('ripper-tags')
+" 	  let g:tagbar_type_ruby = {
+" 	      \ 'kinds'      : ['m:modules',
+" 			      \ 'c:classes',
+" 			      \ 'C:constants',
+" 			      \ 'F:singleton methods',
+" 			      \ 'f:methods',
+" 			      \ 'a:aliases'],
+" 	      \ 'kind2scope' : { 'c' : 'class',
+" 			       \ 'm' : 'class' },
+" 	      \ 'scope2kind' : { 'class' : 'c' },
+" 	      \ 'ctagsbin'   : 'ripper-tags',
+" 	      \ 'ctagsargs'  : ['-f', '-']
+" 	      \ }
+" 	endif
+" 	let g:tagbar_type_typescript = {
+" 	  \ 'ctagsbin' : 'tstags',
+" 	  \ 'ctagsargs' : '-f-',
+" 	  \ 'kinds': [
+" 	    \ 'e:enums:0:1',
+" 	    \ 'f:function:0:1',
+" 	    \ 't:typealias:0:1',
+" 	    \ 'M:Module:0:1',
+" 	    \ 'I:import:0:1',
+" 	    \ 'i:interface:0:1',
+" 	    \ 'C:class:0:1',
+" 	    \ 'm:method:0:1',
+" 	    \ 'p:property:0:1',
+" 	    \ 'v:variable:0:1',
+" 	    \ 'c:const:0:1',
+" 	  \ ],
+" 	  \ 'sort' : 0
+" 	\ }
 "}}}
 
  "Plug 'Yggdroot/LeaderF', { 'do': './install.sh' } "{{{
