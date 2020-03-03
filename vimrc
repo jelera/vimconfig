@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Tue 18 Feb 2020 09:52:54 AM CST
+" Last Updated: Mon 02 Mar 2020 12:35:46 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -83,6 +83,7 @@ Plug 'valloric/MatchTagAlways' "{{{
 		\ 'erb' : 1
 		\}
 "}}}
+Plug 'junegunn/goyo.vim'
 "}}}
 
 Plug 'SirVer/ultisnips'
