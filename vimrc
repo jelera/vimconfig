@@ -993,11 +993,18 @@ augroup Filetype Specific         "{{{
 
 	" JSON syntax
 	au BufRead,BufNewFile *.json setlocal ft=json
+	autocmd FileType javascript,javascript.jsx setlocal equalprg=prettier\
+																																\ --stdin-filepath\ /tmp/file.js
+																																\ --tab-width\ 2
+																																\ --use-tabs
+																																\ --single-quote
+																																\ --trailing-comma\ es5
 	autocmd FileType javascript,javascript.jsx setlocal formatprg=prettier\
-																															\--stdin\
-																															\--print-width\ 80\
-																															\--single-quote\
-																															\--trailing-comma\ es5
+																																\ --stdin-filepath\ /tmp/file.js
+																																\ --tab-width\ 2
+																																\ --use-tabs
+																																\ --single-quote
+																																\ --trailing-comma\ es5
 
 	" }}}
 
