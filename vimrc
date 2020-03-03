@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Mon 02 Mar 2020 12:35:46 PM CST
+" Last Updated: Mon 02 Mar 2020 07:08:45 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -383,7 +383,6 @@ filetype plugin indent on " Required!
 
 "}}}
 
-" set autochdir
 "----------------------------------------------------------------------------//
 " BASIC CONFIGURATION                                                       {{{
 "------------------------------------+---------------------------------------//
@@ -607,6 +606,29 @@ if $TERM_PROGRAM == 'iTerm.app'
 endif
 "}}}
 endif
+
+hi  Comment  cterm=italic
+
+hi  javaScriptFuncKeyword ctermfg=175 cterm=italic
+hi  javaScriptFuncArg ctermfg=195
+hi  javaScriptFuncDef ctermfg=186 cterm=bold
+hi  javaScriptFuncExp ctermfg=186 cterm=bold
+
+" Ruby
+hi  rubyClassName ctermfg=44 cterm=bold
+hi  rubyMethodName ctermfg=35 cterm=bold,italic
+hi  rubyBlockParameterList ctermfg=116
+" hi  rubyEntities ctermfg=99 cterm=italic
+" hi  rubyEntity ctermfg=99 cterm=italic
+hi  rubyMacro ctermfg=140 cterm=italic
+hi  rubyControl ctermfg=150 cterm=bold
+" hi  rubyResponse ctermfg=150 cterm=bold
+hi  rubyInstanceVariable ctermfg=175
+hi  rubyHelper ctermfg=214 cterm=bold,italic
+hi  rubyViewHelper ctermfg=185 cterm=bold,italic
+" hi  rubyKeywordAsMethod ctermfg=35
+
+
 
 if &diff
 	colorscheme hybrid-light
