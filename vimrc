@@ -721,8 +721,8 @@ set smartindent
 "------------------------------------+
 set shiftwidth=2
 set tabstop=2
+set noexpandtab " Use tabs instead of spaces
 set smarttab
-set noexpandtab
 "}}}
 
 "}}}
