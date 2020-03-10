@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Sat 07 Mar 2020 02:35:47 PM CST
+" Last Updated: Tue 10 Mar 2020 05:28:36 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -86,6 +86,8 @@ Plug 'valloric/MatchTagAlways' "{{{
 Plug 'junegunn/goyo.vim'
 "}}}
 
+
+
 Plug 'SirVer/ultisnips'
 let g:UltiSnipsExpandTrigger="F10"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -160,6 +162,7 @@ Plug 'tpope/vim-fugitive' " {{{
 	" automatically delete fugitive buffers when leaving them
 	autocmd BufReadPost fugitive://* setlocal bufhidden=delete
 "}}}
+Plug 'rhysd/committia.vim'
 Plug 'dense-analysis/ale' " {{{
 	let g:airline#extensions#ale#enabled = 1
 	let g:ale_sign_column_always = 1
@@ -606,23 +609,25 @@ endif
 "}}}
 endif
 
-hi  Comment  cterm=italic
+" hi  Comment  cterm=italic
 
-hi  javaScriptFuncKeyword ctermfg=175 cterm=italic
+hi  javaScriptFuncKeyword ctermfg=175
+" hi  javaScriptFuncKeyword ctermfg=175 cterm=italic
 hi  javaScriptFuncArg ctermfg=195
 hi  javaScriptFuncDef ctermfg=186 cterm=bold
 hi  javaScriptFuncExp ctermfg=186 cterm=bold
 
 " Ruby
 hi  rubyClassName ctermfg=44 cterm=bold
-hi  rubyMethodName ctermfg=35 cterm=bold,italic
+hi  rubyMethodName ctermfg=35 cterm=bold
+" hi  rubyMethodName ctermfg=35 cterm=bold,italic
 hi  rubyBlockParameterList ctermfg=116
-" hi  rubyEntities ctermfg=99 cterm=italic
-" hi  rubyEntity ctermfg=99 cterm=italic
+hi  rubyMacro ctermfg=140
 hi  rubyMacro ctermfg=140 cterm=italic
 hi  rubyControl ctermfg=150 cterm=bold
-" hi  rubyResponse ctermfg=150 cterm=bold
 hi  rubyInstanceVariable ctermfg=175
+hi  rubyHelper ctermfg=214 cterm=bold
+hi  rubyViewHelper ctermfg=185 cterm=bold
 hi  rubyHelper ctermfg=214 cterm=bold,italic
 hi  rubyViewHelper ctermfg=185 cterm=bold,italic
 " hi  rubyKeywordAsMethod ctermfg=35
