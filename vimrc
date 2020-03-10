@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Mon 02 Mar 2020 07:08:45 PM CST
+" Last Updated: Sat 07 Mar 2020 02:35:47 PM CST
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -553,7 +553,6 @@ set foldcolumn=0
 set foldtext=FoldText()
 "}}}
 
-
 "----------------------------------------------------------------------------//
 " USER INTERFACE                                                            {{{
 "------------------------------------+---------------------------------------//
@@ -680,7 +679,6 @@ set diffopt+=context:3
 "}}}
 "}}}
 
-
 "----------------------------------------------------------------------------//
 " LAYOUT / TEXT FORMATTING                                                  {{{
 "------------------------------------+---------------------------------------//
@@ -726,7 +724,6 @@ set smarttab
 "}}}
 
 "}}}
-
 
 "----------------------------------------------------------------------------//
 " MAPPINGS                                                                  {{{
@@ -810,7 +807,6 @@ au FileType mail,text,markdown au BufEnter,BufWinEnter <buffer> setlocal spell
 
 "}}}
 
-
 "----------------------------------------------------------------------------//
 " ABBREVIATIONS                                                             {{{
 "------------------------------------+---------------------------------------//
@@ -876,7 +872,6 @@ iab llorem Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eius
 "}}}
 
 "}}}
-
 
 "----------------------------------------------------------------------------//
 " AUTOCOMMANDS                                                              {{{
@@ -1105,7 +1100,6 @@ augroup Filetype Specific         "{{{
 augroup END "}}}
 "}}}
 
-
 "----------------------------------------------------------------------------//
 " HELPER FUNCTIONS                                                          {{{
 "----------------------------------------------------------------------------//
@@ -1119,6 +1113,7 @@ function s:MkNonExDir(file, buf) "{{{
 		endif
 	endif
 endfunction
+
 augroup BWCCreateDir
 	autocmd!
 	autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
