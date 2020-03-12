@@ -304,6 +304,7 @@ Plug 'liuchengxu/vista.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }"{{{
 Plug 'junegunn/fzf.vim'
 	nnoremap <silent> <C-P> :FZF<Enter>
+	nnoremap <silent> \ :Rg<CR>
 "}}}
 Plug 'scrooloose/nerdtree' "{{{
  Plug 'Xuyuanp/nerdtree-git-plugin'
