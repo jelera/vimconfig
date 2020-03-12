@@ -594,46 +594,40 @@ endif
 "}}}
 else
 " Terminal Vim"{{{
-set t_Co=256 "why you no tell me correct colors?!?!
-if $COLORTERM == 'gnome-terminal'
-	set t_Co=256 "why you no tell me correct colors?!?!
-endif
-if $TERM_PROGRAM == 'iTerm.app'
-	" different cursors for insert vs normal mode
-	" if exists('$TMUX')
-	" 	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-	" 	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-	" else
-	" 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-	" 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-	" endif
-endif
+" set t_Co=256 "why you no tell me correct colors?!?!
+" if $COLORTERM == 'gnome-terminal'
+" 	set t_Co=256 "why you no tell me correct colors?!?!
+" endif
+" if $TERM_PROGRAM == 'iTerm.app'
+" 	" different cursors for insert vs normal mode
+" 	" if exists('$TMUX')
+" 	" 	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+" 	" 	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+" 	" else
+" 	" 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+" 	" 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" 	" endif
+" endif
 "}}}
 endif
 
-" hi  Comment  cterm=italic
+hi  Comment  cterm=italic
 
-hi  javaScriptFuncKeyword ctermfg=175
-" hi  javaScriptFuncKeyword ctermfg=175 cterm=italic
+hi  javaScriptFuncKeyword ctermfg=175 cterm=italic
 hi  javaScriptFuncArg ctermfg=195
 hi  javaScriptFuncDef ctermfg=186 cterm=bold
 hi  javaScriptFuncExp ctermfg=186 cterm=bold
 
 " Ruby
 hi  rubyClassName ctermfg=44 cterm=bold
-hi  rubyMethodName ctermfg=35 cterm=bold
-" hi  rubyMethodName ctermfg=35 cterm=bold,italic
+hi  rubyMethodName ctermfg=35 cterm=bold,italic
 hi  rubyBlockParameterList ctermfg=116
-hi  rubyMacro ctermfg=140
 hi  rubyMacro ctermfg=140 cterm=italic
 hi  rubyControl ctermfg=150 cterm=bold
 hi  rubyInstanceVariable ctermfg=175
-hi  rubyHelper ctermfg=214 cterm=bold
-hi  rubyViewHelper ctermfg=185 cterm=bold
 hi  rubyHelper ctermfg=214 cterm=bold,italic
 hi  rubyViewHelper ctermfg=185 cterm=bold,italic
 " hi  rubyKeywordAsMethod ctermfg=35
-
 
 
 if &diff
