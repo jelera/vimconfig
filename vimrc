@@ -8,7 +8,7 @@
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Tue 10 Mar 2020 05:28:36 PM CDT
+" Last Updated: Wed 11 Mar 2020 01:14:16 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -214,7 +214,7 @@ Plug 'NLKNguyen/papercolor-theme'
 "------------------+
 " Navigation     {{{
 "------------------+
-Plug 'ludovicchabant/vim-gutentags'
+" Plug 'ludovicchabant/vim-gutentags'
 Plug 'liuchengxu/vista.vim'
 
 " Plug 'majutsushi/tagbar' "{{{
