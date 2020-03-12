@@ -751,8 +751,8 @@ nnoremap <Leader>syn :call <SID>SynStack()<CR>
 
 " Quick Highlight of the selected searched word
 " This rewires n and N to do the highlighing...
-nnoremap <silent> n   n:call HLNext(0.2)<cr>
-nnoremap <silent> N   N:call HLNext(0.2)<cr>
+" nnoremap <silent> n   n:call HLNext(0.2)<cr>
+" nnoremap <silent> N   N:call HLNext(0.2)<cr>
 "}}}
 
 "------------------------------------+
@@ -911,7 +911,7 @@ augroup General                   "{{{
 	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"" | endif
 
 	" Autoupdate the timestamp when saving the file
-	autocmd! BufWritePre * :call s:UpdateTimestamp()
+	" autocmd! BufWritePre * :call s:UpdateTimestamp()
 augroup END " }}}
 
 "------------------------------------+
