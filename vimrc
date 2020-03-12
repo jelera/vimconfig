@@ -1053,6 +1053,14 @@ augroup Filetype Specific         "{{{
 	" }}}
 
 	"------------------+
+	" Slim           {{{
+	"------------------+
+	" Enable slim syntax highlight
+	autocmd BufNewFile,BufRead *.slim set filetype=slim
+	autocmd FileType slim setlocal foldmethod=indent
+	" }}}
+
+	"------------------+
 	" Python         {{{
 	"------------------+
 	au FileType python setlocal nocindent
