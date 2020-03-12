@@ -351,6 +351,7 @@ Plug 'scrooloose/nerdtree' "{{{
 	"}}}
 
 	" Ruby -------------------{{{
+	Plug 'slim-template/vim-slim'
 	Plug 'vim-ruby/vim-ruby'
 	Plug 'vim-utils/vim-ruby-fold' "{{{
 	let g:ruby_fold_lines_limit = 200
