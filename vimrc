@@ -553,7 +553,7 @@ set completeopt=menu,menuone,longest
 "----------------------------------------------------------------------------//
 set foldenable
 set foldmethod=marker
-set foldlevel=0
+set foldlevel=99
 set foldcolumn=0
 set foldtext=FoldText()
 "}}}
