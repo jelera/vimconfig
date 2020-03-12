@@ -1301,11 +1301,11 @@ function! <SID>StripTrailingWhitespace() "{{{
 	call cursor(l, c)
 endfunction "}}}
 
-function! s:UpdateTimestamp() "{{{
-	let pat = '\(\(Last\)\?\s*\([Cc]hanged\?\|[Mm]odified\|[Uu]pdated\?\)\s*:\s*\).*'
-	let rep = '\1' . strftime("%a %d %b %Y %I:%M:%S %p %Z")
-	call s:subst(1, 20, pat, rep)
-endfunction "}}}
+" function! s:UpdateTimestamp() "{{{
+" 	let pat = '\(\(Last\)\?\s*\([Cc]hanged\?\|[Mm]odified\|[Uu]pdated\?\)\s*:\s*\).*'
+" 	let rep = '\1' . strftime("%a %d %b %Y %I:%M:%S %p %Z")
+" 	call s:subst(1, 20, pat, rep)
+" endfunction "}}}
 
 function! s:subst(start, end, pat, rep) "{{{
 	let lineno = a:start
