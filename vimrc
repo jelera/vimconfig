@@ -433,8 +433,8 @@ Plug 'preservim/nerdtree' "{{{
 		autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 	augroup END
 
-	nnoremap <C-T> :NERDTreeToggle<Enter>
-	nnoremap <leader>t :NERDTreeFind<Enter>
+	nnoremap <c-t> :NERDTreeToggle<Enter>
+	nnoremap <c-t>f :NERDTreeFind<Enter>
 	let NERDTreeQuitOnOpen = 1
 	let NERDTreeMinimalUI = 1
 	let NERDTreeDirArrows = 1
