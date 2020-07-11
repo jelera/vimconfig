@@ -446,7 +446,6 @@ Plug 'preservim/nerdtree' "{{{
 	" JavaScript, JSON, ES6, JSX -------------{{{
 	Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
 	Plug 'maxmellon/vim-jsx-pretty'
-	Plug 'elzr/vim-json', { 'for': ['javascript', 'json', 'javascript.jsx'] }
 	"}}}
 
 	" HTML/XML/CSS -----------{{{
@@ -1203,10 +1202,6 @@ augroup Filetype Specific         "{{{
 	" JavaScript     {{{
 	"------------------+
 	au FileType javascript,javascript.jsx setlocal ts=2 sts=2 sw=2 noexpandtab
-
-	" JSON syntax
-	au BufRead,BufNewFile *.json setlocal ft=json
-	" }}}
 
 	"------------------+
 	" CSS            {{{
