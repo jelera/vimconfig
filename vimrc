@@ -806,7 +806,9 @@ else
 "}}}
 endif
 
-" hi  Comment  cterm=italic
+hi  Comment  cterm=italic
+hi  gitcommitFirstLine ctermfg=81
+hi  gitcommitSummary ctermfg=81
 
 " hi  javaScriptFuncKeyword ctermfg=175 cterm=italic
 " hi  javaScriptFuncArg ctermfg=195
