@@ -90,7 +90,6 @@ Plug 'vim-airline/vim-airline-themes'
 	let g:airline_skip_empty_sections = 1
 	let g:airline#extensions#branch#format = 1
 	let g:airline_theme = 'sol'
-	let g:airline_section_b = ''
 	let g:airline_section_z = "\uE0A1 %l:%c %p%%|%L"
 	let g:airline#extensions#ale#enabled = 1
 	let airline#extensions#ale#error_symbol = '❗ '
