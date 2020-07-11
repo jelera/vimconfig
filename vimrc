@@ -197,6 +197,11 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} "{{{
 	inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 	" " Or use `complete_info` if your vim support it, like:
 
+	nmap <silent> gd <Plug>(coc-definition)
+	" nnoremap <silent> gr <Plug>(coc-references)
+	" nnoremap <silent> gj <Plug>(coc-implementation)
+
+	" let g:coc_global_extensions = ['coc-solargraph']
 	" SNIPPETS
 	" " Use <C-l> for trigger snippet expand.
 	" imap <C-l> <Plug>(coc-snippets-expand)
