@@ -421,6 +421,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "{{{
 	nnoremap <silent> <C-P> :FZF<Enter>
 	" Ripgrep support with FZF
 	nnoremap <silent> \ :Rg<CR>
+	" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 "}}}
 
 Plug 'preservim/nerdtree' "{{{
