@@ -311,7 +311,7 @@ Plug 'janko/vim-test' "{{{
 	let test#strategy = 'vimterminal'
 	nnoremap <silent> <leader>tf :TestFile<CR>
 	nnoremap <silent> <leader>tl :TestLast<CR>
-	nnoremap <silent> <leader>tn :TestNearest<CR>
+	nnoremap <silent> <leader>tn :w<CR>:TestNearest<CR>
 	nnoremap <silent> <leader>ts :TestSuite<CR>
 "}}}
 
