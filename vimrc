@@ -9,7 +9,7 @@ scriptencoding utf-8
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Wed 11 Mar 2020 01:14:16 PM CDT
+" Last Updated: Sun 02 Aug 2020 03:04:21 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -88,9 +88,8 @@ Plug 'vim-airline/vim-airline-themes'
 				\ }
 	let g:airline_powerline_fonts = 1
 	let g:airline_skip_empty_sections = 1
-	let g:airline#extensions#branch#format = 1
-	let g:airline_theme = 'sol'
-	let g:airline_section_z = "\uE0A1 %l:%c %p%%|%L"
+	let g:airline#extensions#branch#format = 2
+	let g:airline_theme = 'luna'
 	let g:airline#extensions#ale#enabled = 1
 	let airline#extensions#ale#error_symbol = '❗ '
 	let airline#extensions#ale#warning_symbol = '⚠️  '
@@ -125,10 +124,6 @@ Plug 'tpope/vim-projectionist' "{{{
 
 Plug 'mhinz/vim-startify' "{{{
 	" Fancy start screen with MRU files
-"}}}
-
-Plug 'junegunn/goyo.vim' "{{{
-	" Distraction-free writing in Vim
 "}}}
 
 Plug 'Valloric/ListToggle' "{{{
@@ -168,54 +163,67 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} "{{{
 	set updatetime=300
 	set shortmess+=c
 	set signcolumn=yes
+
+	" Tab for completion and snippets {{{
 	" Use tab for trigger completion with characters ahead and navigate.
 	" Use command ':verbose imap <tab>' to make sure tab is not mapped by other
 	" plugin.
 	inoremap <silent><expr> <TAB>
-				\ pumvisible() ? "\<C-n>" :
+				\ pumvisible() ? coc#_select_confirm() :
+				\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
 				\ <SID>check_back_space() ? "\<TAB>" :
 				\ coc#refresh()
-	inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 	function! s:check_back_space() abort
 		let col = col('.') - 1
 		return !col || getline('.')[col - 1]  =~# '\s'
 	endfunction
 
-	" Navigate snippet placeholders using tab
-	let g:coc_snippet_next = '<Tab>'
+	let g:coc_snippet_next = '<tab>'
 	let g:coc_snippet_prev = '<S-Tab>'
+	"}}}
 
-	"Use <c-space> to trigger completion.
+	"Use <c-space> to trigger completion.{{{
 	inoremap <silent><expr> <c-space> coc#refresh()
+	"}}}
 
-	" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-	" position.
-	" " Coc only does snippet and additional edit on confirm.
-	" inoremap <C-R>=pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-	inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-	" " Or use `complete_info` if your vim support it, like:
+	" Use <cr> to confirm completion {{{
+	" `<C-g>u` means break undo chain at current
+	" position. Coc only does snippet and additional edit on confirm.
+	" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+	if exists('*complete_info')
+		inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+	else
+		inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+	endif
+	"}}}
 
+	" GoTo code navigation. {{{
 	nmap <silent> gd <Plug>(coc-definition)
-	" nnoremap <silent> gr <Plug>(coc-references)
-	" nnoremap <silent> gj <Plug>(coc-implementation)
+	nmap <silent> gr <Plug>(coc-references)
+	nmap <silent> gm <Plug>(coc-implementation)
+	"}}}
+
+	" Use K to show documentation in preview window.{{{
+	nnoremap <silent> K :call <SID>show_documentation()<CR>
+	function! s:show_documentation()
+		if (index(['vim','help'], &filetype) >= 0)
+			execute 'h '.expand('<cword>')
+		else
+			call CocAction('doHover')
+		endif
+	endfunction
+	"}}}
+
+	" " Symbol renaming.
+	" nmap <leader>rn <Plug>(coc-rename)
+
+	" " Formatting selected code.
+	" xmap <leader>f  <Plug>(coc-format-selected)
+	" nmap <leader>f  <Plug>(coc-format-selected)
+
 
 	" let g:coc_global_extensions = ['coc-solargraph']
-	" SNIPPETS
-	" " Use <C-l> for trigger snippet expand.
-	" imap <C-l> <Plug>(coc-snippets-expand)
-
-	" " Use <C-j> for select text for visual placeholder of snippet.
-	" vmap <C-j> <Plug>(coc-snippets-select)
-
-	" " Use <C-j> for jump to next placeholder, it's default of coc.nvim
-	" let g:coc_snippet_next = '<c-j>'
-
-	" " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-	" let g:coc_snippet_prev = '<c-k>'
-
-	" " Use <C-j> for both expand and jump (make expand higher priority.)
-	" imap <C-j> <Plug>(coc-snippets-expand-jump)
 "}}}
 "}}}
 
@@ -229,6 +237,18 @@ Plug 'vim-scripts/matchit.zip' "{{{
 
 Plug 'tpope/vim-fugitive' "{{{
 	" Provides a nice interface and extra commands for Git
+	augroup Fugitive
+		autocmd!
+		autocmd FileType fugitive setl nonumber
+		autocmd FileType gitcommit setl nonumber
+		autocmd FileType gitcommit setl spell
+		autocmd FileType gitcommit setl formatoptions+=tn formatoptions-=l
+		autocmd FileType gitcommit setl colorcolumn=72 textwidth=72
+	augroup END
+"}}}
+
+Plug 'tpope/vim-rhubarb' "{{{
+	" Adds :Gbrowse for opening in Github
 "}}}
 
 Plug 'rhysd/committia.vim' "{{{
@@ -250,7 +270,8 @@ Plug 'dense-analysis/ale' " {{{
 				\ 'javascript': ['prettier', 'eslint'],
 				\ 'javascript.jsx': ['prettier', 'eslint'],
 				\ 'html': ['prettier'],
-				\ 'css': ['prettier']
+				\ 'css': ['prettier'],
+				\ 'ruby': ['rubocop']
 	\}
 
 	let g:ale_linter_aliases = {'jsx': ['css', 'javascript']}
@@ -309,22 +330,23 @@ Plug 'valloric/MatchTagAlways' "{{{
 
 Plug 'janko/vim-test' "{{{
 	let test#strategy = 'vimterminal'
+	let test#ruby#rspec#executable = 'bin/rspec'
 	nnoremap <silent> <leader>tf :TestFile<CR>
 	nnoremap <silent> <leader>tl :TestLast<CR>
 	nnoremap <silent> <leader>tn :w<CR>:TestNearest<CR>
 	nnoremap <silent> <leader>ts :TestSuite<CR>
 "}}}
 
+Plug 'rhysd/reply.vim', { 'on': ['Repl', 'ReplAuto'] }
+Plug 'rhysd/git-messenger.vim'
+Plug 'rhysd/conflict-marker.vim'
+Plug 'tpope/vim-eunuch'
 "}}}
 
 "------------------+
 " Colorschemes   {{{
 "------------------+
-Plug 'NLKNguyen/papercolor-theme'
 Plug 'morhetz/gruvbox'
-Plug 'cocopon/iceberg.vim'
-Plug 'dracula/vim'
-Plug 'junegunn/seoul256.vim'
 "}}}
 
 "------------------+
@@ -332,87 +354,6 @@ Plug 'junegunn/seoul256.vim'
 "------------------+
 Plug 'liuchengxu/vista.vim' "{{{
 	" Tag and LSP symbols viewer
-"}}}
-
-" Plug 'majutsushi/tagbar' "{{{
-" 	" nnoremap <silent> <leader><leader>t :TagbarToggle<CR>
-" 	" let g:tagbar_ctags_bin = '/usr/bin/ctags'
-" 	let g:tagbar_type_markdown = {
-" 	\ 'ctagstype' : 'markdown',
-" 	\ 'kinds' : [
-" 		\ 'h:Heading_L1',
-" 		\ 'i:Heading_L2',
-" 		\ 'k:Heading_L3'
-" 	\ ]
-" 	\ }
-" 	let g:tagbar_type_css = {
-" 	\ 'ctagstype' : 'Css',
-" 	\ 'kinds' : [
-" 		\ 'c:classes',
-" 		\ 's:selectors',
-" 		\ 'i:identities'
-" 	\ ]
-" 	\ }
-" 	let g:tagbar_type_javascript = {
-" 	      \ 'ctagstype': 'javascript',
-" 	      \ 'ctagsbin': 'jsctags',
-" 	      \ 'kinds': [
-" 	      \ 'A:arrays',
-" 	      \ 'P:properties',
-" 	      \ 'T:tags',
-" 	      \ 'O:objects',
-" 	      \ 'G:generator functions',
-" 	      \ 'F:functions',
-" 	      \ 'C:constructors/classes',
-" 	      \ 'M:methods',
-" 	      \ 'V:variables',
-" 	      \ 'I:imports',
-" 	      \ 'E:exports',
-" 	      \ 'S:styled components'
-"       	\ ]}
-" 	let g:tagbar_type_ruby = {
-" 	\ 'kinds' : [
-" 		\ 'm:modules',
-" 		\ 'c:classes',
-" 		\ 'd:describes',
-" 		\ 'C:contexts',
-" 		\ 'f:methods',
-" 		\ 'F:singleton methods'
-" 	\ ]
-" 	\ }
-" 	if executable('ripper-tags')
-" 	  let g:tagbar_type_ruby = {
-" 	      \ 'kinds'      : ['m:modules',
-" 			      \ 'c:classes',
-" 			      \ 'C:constants',
-" 			      \ 'F:singleton methods',
-" 			      \ 'f:methods',
-" 			      \ 'a:aliases'],
-" 	      \ 'kind2scope' : { 'c' : 'class',
-" 			       \ 'm' : 'class' },
-" 	      \ 'scope2kind' : { 'class' : 'c' },
-" 	      \ 'ctagsbin'   : 'ripper-tags',
-" 	      \ 'ctagsargs'  : ['-f', '-']
-" 	      \ }
-" 	endif
-" 	let g:tagbar_type_typescript = {
-" 	  \ 'ctagsbin' : 'tstags',
-" 	  \ 'ctagsargs' : '-f-',
-" 	  \ 'kinds': [
-" 	    \ 'e:enums:0:1',
-" 	    \ 'f:function:0:1',
-" 	    \ 't:typealias:0:1',
-" 	    \ 'M:Module:0:1',
-" 	    \ 'I:import:0:1',
-" 	    \ 'i:interface:0:1',
-" 	    \ 'C:class:0:1',
-" 	    \ 'm:method:0:1',
-" 	    \ 'p:property:0:1',
-" 	    \ 'v:variable:0:1',
-" 	    \ 'c:const:0:1',
-" 	  \ ],
-" 	  \ 'sort' : 0
-" 	\ }
 "}}}
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "{{{
@@ -630,26 +571,6 @@ match errorMsg /[^\t]\zs\t+/
 set completeopt=menu,menuone,preview,noselect,noinsert
 
 "}}}
-
-"------------------------------------+
-" GREP / AG                        {{{
-"------------------------------------+
-" As seen in http://robots.thoughtbot.com/faster-grepping-in-vim/
-
-" Use ag instead of grep
-" if executable('ag')
-" 	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-" 	set grepformat=%f:%l:%c:%m
-" endif
-
-" Search the word under the cursor with K
-" nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
-
-" bind \ (backward slash) to grep shortcut
-" command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!"
-" nnoremap \ :Ag<SPACE>
-"}}}
-
 "}}}
 
 "----------------------------------------------------------------------------//
@@ -657,7 +578,7 @@ set completeopt=menu,menuone,preview,noselect,noinsert
 "----------------------------------------------------------------------------//
 set foldenable
 set foldmethod=marker
-set foldlevel=99
+" set foldlevel=99
 set foldcolumn=0
 set foldtext=FoldText()
 function! FoldText(...) "{{{
@@ -752,82 +673,39 @@ endfunction "}}}
 "------------------------------------+---------------------------------------//
 " Look and Feel settings           {{{
 "------------------------------------+
-" set t_Co=256
 set termguicolors
 
-" These customizations are for the Hybrid Colorscheme, for my readability {{{
-" hi  FoldColumn   guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
-" hi  Folded       guifg=#a8a8a8 guibg=#444444 gui=NONE      ctermfg=248 ctermbg=238  cterm=NONE
-" hi  LineNr       guifg=#4e4e4e guibg=#000                  ctermfg=237 ctermbg=233
-" hi  helpExample  guifg=#5faf00
-
-" This piece highlights the border of 80 char"
-" let &colorcolumn=join(range(81,999), ',')
-" highlight ColorColumn ctermbg=235 guibg=#2c2d27
-"}}}
-
-" let g:seoul256_background = 233
-" colorscheme seoul256
 let g:gruvbox_contrast_dark = 'hard'
 colorscheme gruvbox
 
-"set background=dark
+set background=dark
 
 if has('gui_running')
-" GVIM / MacVim"{{{
+	" GVIM / MacVim"{{{
 	set guioptions-=T
 	set guioptions+=c
 	" Font Selection
 	if has('mac')
 		" For MacVim
-		set guifont=Fira\ Code:h14
+		set guifont=CaskaydiaCove\ Nerd\ Font\ Mono:h15
 	else
 		" For Linux gVim
 		set guifont=Fira\ Code\ 12
-endif
-"}}}
+	endif
+	"}}}
 else
-" Terminal Vim"{{{
-" set t_Co=256 "why you no tell me correct colors?!?!
-" if $COLORTERM == 'gnome-terminal'
-" 	set t_Co=256 "why you no tell me correct colors?!?!
-" endif
-" if $TERM_PROGRAM == 'iTerm.app'
-" 	" different cursors for insert vs normal mode
-" 	" if exists('$TMUX')
-" 	" 	let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-" 	" 	let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-" 	" else
-" 	" 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-" 	" 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-" 	" endif
-" endif
-"}}}
+	" Terminal Vim"{{{
+	set t_Co=256
+	"}}}
 endif
 
 hi  Comment  cterm=italic
 hi  gitcommitFirstLine ctermfg=81
 hi  gitcommitSummary ctermfg=81
 
-" hi  javaScriptFuncKeyword ctermfg=175 cterm=italic
-" hi  javaScriptFuncArg ctermfg=195
-" hi  javaScriptFuncDef ctermfg=186 cterm=bold
-" hi  javaScriptFuncExp ctermfg=186 cterm=bold
-
-" Ruby
-" hi  rubyClassName ctermfg=44 cterm=bold
-" hi  rubyMethodName ctermfg=35 cterm=bold,italic
-" hi  rubyBlockParameterList ctermfg=116
-" hi  rubyMacro ctermfg=140 cterm=italic
-" hi  rubyControl ctermfg=150 cterm=bold
-" hi  rubyInstanceVariable ctermfg=175
-" hi  rubyHelper ctermfg=214 cterm=bold,italic
-" hi  rubyViewHelper ctermfg=185 cterm=bold,italic
-
-
-if &diff
-	colorscheme hybrid-light
-endif
+" if &diff
+" 	colorscheme hybrid-light
+" endif
 " }}}
 
 "------------------------------------+
@@ -852,9 +730,6 @@ set number
 set numberwidth=4
 set ruler
 
-" Tenths of a second to show matching parentheses
-" set matchtime=2
-
 " Shows matching brackets when text indicator is over them
 set showmatch
 
@@ -863,14 +738,18 @@ set scrolloff=5
 set sidescrolloff=20
 
 " The screen won't be redrawn unless actions took place
-" set lazyredraw
+set lazyredraw
+
+" Improves smoothness of redrawing when there are multiple windows and the
+" terminal does not support a scrolling region
+set ttyfast
 
 " When moving thru the lines, the cursor will try to stay in the previous columns
 set nostartofline
 
 set cursorline
 set showcmd
-set pumheight=10
+set pumheight=15
 set diffopt+=context:3
 "}}}
 "}}}
@@ -899,7 +778,11 @@ set linebreak
 " 1 = Don't break a line after a one-letter word
 
 " This is the width of the text after the filter (par) goes thru the file
-" set textwidth=79
+set textwidth=79
+
+if executable('par')
+	set formatprg=par\ -w79
+endif
 " }}}
 
 "------------------------------------+
@@ -960,11 +843,6 @@ function! <SID>SynStack() "{{{
 	endif
 	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunction "}}}
-
-" Quick Highlight of the selected searched word
-" This rewires n and N to do the highlighing...
-" nnoremap <silent> n   n:call HLNext(0.2)<cr>
-" nnoremap <silent> N   N:call HLNext(0.2)<cr>
 "}}}
 
 "------------------------------------+
@@ -981,8 +859,8 @@ noremap <leader>h2 yypVr-o
 "------------------------------------+
 " Copy, Cut, Paste and Blockwise   {{{
 "------------------------------------+
-" Use CTRL-Q to do what CTRL-V used to do, Blockwise Visual Selection
-noremap <C-Q> <C-V>
+" " Use CTRL-Q to do what CTRL-V used to do, Blockwise Visual Selection
+" noremap <C-Q> <C-V>
 
 " CTRL-X is cut
 vnoremap <C-X> "+x
@@ -991,8 +869,8 @@ vnoremap <C-X> "+x
 vnoremap <C-C> "+y
 
 " Smart Paste CTRL-V from the system's clipboard and indents code automatically
-nnoremap <C-V> "+P=']
-inoremap <C-V> <C-o>"+P<C-o>=']
+nnoremap <leader>v "+P=']
+" inoremap <C-V> <C-o>"+P<C-o>=']
 "}}}
 
 "------------------------------------+
@@ -1013,7 +891,7 @@ nnoremap <leader>spl :setlocal spell!<cr>
 
 " Spell checking in Mail textfiles (mutt)
 augroup Spelling plain text
-	au FileType mail,text,markdown au BufEnter,BufWinEnter <buffer> setlocal spell
+	au FileType mail,text au BufEnter,BufWinEnter <buffer> setlocal spell
 augroup END
 "}}}
 
@@ -1025,14 +903,14 @@ augroup END
 " Date Abbreviations              "{{{
 "------------------------------------+
 " adate : Dec 06, 2013
-" xdate : Fri, 06 Dec 2013 21:52:35 PM CDT
+" pxdate : Fri, 06 Dec 2013 21:52:35 PM CDT
 " rdate : Fri, 06 Dec 2013 21:52:35 -0600
 " ldate : 2013-12-06 21:52:52
 " sdate : 2013-12-06
 
 " RFC822 date format"
 " iab <expr> rdate strftime("%a, %d %b %Y %H:%M:%S %z")
-" iab <expr> xdate strftime("%a %d %b %Y %I:%M:%S %p %Z")
+iab <expr> pxdate strftime("%a %d %b %Y %I:%M:%S %p %Z")
 
 " " American date format"
 " iab adate <C-R>=strftime("%b %d, %Y")<cr>
@@ -1058,15 +936,6 @@ iab whta what
 
 iab becuase because
 iab becuas because
-"}}}
-
-"------------------------------------+
-" Programming Abbreviations       "{{{
-"------------------------------------+
-iab #e   #!/usr/bin/env
-iab #py  #!/usr/bin/python
-iab #rb  #!/usr/bin/ruby
-iab #sh  #!/bin/bash
 "}}}
 
 "------------------------------------+
@@ -1112,7 +981,7 @@ augroup General                   "{{{
 
 	function! s:SetupHelpWindow() "{{{
 		wincmd L
-		vertical resize 79
+		vertical resize 83
 		setl nonumber winfixwidth colorcolumn=
 	endfunction "}}}
 
@@ -1127,9 +996,6 @@ augroup General                   "{{{
 	" Open in last edit place
 	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g'\"" | endif
 
-	" Autoupdate the timestamp when saving the file
-	" autocmd! BufWritePre * :call s:UpdateTimestamp()
-
 	autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 
 	function s:MkNonExDir(file, buf) "{{{
@@ -1141,18 +1007,15 @@ augroup General                   "{{{
 			endif
 		endif
 	endfunction "}}}
+
 augroup END " }}}
 
 "------------------------------------+
 augroup Formatting                "{{{
 "------------------------------------+
 	autocmd!
-	" Fix gitcommit formatting
-	autocmd FileType gitcommit setl spell textwidth=72
-
 	" Format plain text and e-mails correctly
 	autocmd BufNewFile,BufRead *.txt setl ft=text
-	autocmd FileType mail,text setl formatoptions+=t formatoptions-=l textwidth=72 colorcolumn=72
 augroup END "}}}
 
 "------------------------------------+
@@ -1160,22 +1023,22 @@ augroup Whitespace                "{{{
 "------------------------------------+
 	autocmd!
 	" Remove trailing whitespace from selected filetypes
-	au FileType html,css,sass,javascript,php,python,ruby,sql,vim au BufWritePre <buffer> :silent! call <SID>StripTrailingWhitespace()
+	"au FileType html,css,sass,javascript,php,python,ruby,sql,vim au BufWritePre <buffer> :silent! call <SID>StripTrailingWhitespace()
 
-	function! <SID>StripTrailingWhitespace() "{{{
-		" Preparation: save the last search, and curson position"
-		let _s=@/
-		let l = line('.')
-		let c = col('.')
-		" Do the business"
-		" vint: -ProhibitCommandWithUnintendedSideEffect
-		" vint: -ProhibitCommandRelyOnUser
-		substitute('\s\+$', '', 'e')
+	"function! <SID>StripTrailingWhitespace() "{{{
+	"	" Preparation: save the last search, and curson position"
+	"	let _s=@/
+	"	let l = line('.')
+	"	let c = col('.')
+	"	" Do the business"
+	"	" vint: -ProhibitCommandWithUnintendedSideEffect
+	"	" vint: -ProhibitCommandRelyOnUser
+	"	substitute('\s\+$', '', 'e')
 
-		"Clean up: restore previous search history and cursor position"
-		let @/=_s
-		call cursor(l, c)
-	endfunction "}}}
+	"	"Clean up: restore previous search history and cursor position"
+	"	let @/=_s
+	"	call cursor(l, c)
+	"endfunction "}}}
 augroup END "}}}
 
 "------------------------------------+
@@ -1185,51 +1048,52 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	" Markdown       {{{
 	"------------------+
-	au FileType markdown setlocal textwidth=80
-
-	" Markdown formatting
-	au FileType markdown setlocal autoindent formatoptions=tcroqn2 comments=n:>
+	autocmd FileType markdown setlocal spell
+	autocmd FileType markdown setlocal autoindent
+	autocmd FileType markdown setlocal textwidth=80
+	autocmd FileType markdown setlocal formatoptions=tcroqn2 comments=n:>
 	" }}}
 
-	"------------------+
-	" HTML/XHTML     {{{
-	"------------------+
-	autocmd FileType html,xhtml setlocal textwidth=0
-	autocmd FileType html,xhtml setlocal noexpandtab tabstop=3 shiftwidth=3
+	"----------------------+
+	" HTML/XHTML/XML     {{{
+	"----------------------+
+	autocmd FileType html,xhtml,xml setlocal textwidth=0
+	autocmd FileType html,xhtml,xml setlocal tabstop=3 shiftwidth=3 noexpandtab
 	" }}}
 
 	"------------------+
 	" JavaScript     {{{
 	"------------------+
-	au FileType javascript,javascript.jsx setlocal ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType javascript,javascript.jsx setlocal tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab
+	" }}}
 
 	"------------------+
 	" CSS            {{{
 	"------------------+
 	autocmd FileType css setlocal smartindent
-	autocmd FileType css setlocal noexpandtab tabstop=2 shiftwidth=2
-	autocmd FileType css map <leader>css %s/{\_.\{-}}/\=substitute(submatch(0), '\n', '', 'g')/
+	autocmd FileType css setlocal tabstop=2 shiftwidth=2 noexpandtab
 	autocmd FileType css setlocal equalprg=prettier\ --parser\ css\ --stdin\ --tab-width\ 2
+	autocmd FileType css noremap <leader>css %s/{\_.\{-}}/\=substitute(submatch(0), '\n', '', 'g')/
 	" }}}
 
 	"------------------+
 	" Ruby           {{{
 	"------------------+
-	au FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
-	au FileType eruby setlocal ts=2 sts=2 sw=2 expandtab
+	autocmd FileType ruby,eruby setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+	" autocmd FileType ruby,eruby setlocal foldmethod=expr foldlevel=99
 	" }}}
 
 	"------------------+
 	" YAML           {{{
 	"------------------+
-	au FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+	autocmd FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 	" }}}
 
 	"------------------+
 	" Slim           {{{
 	"------------------+
 	" Enable slim syntax highlight
-	autocmd BufNewFile,BufRead *.slim set filetype=slim
+	autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 	autocmd FileType slim setlocal foldmethod=indent
 	" }}}
 
@@ -1237,7 +1101,9 @@ augroup Filetype Specific         "{{{
 	" Python         {{{
 	"------------------+
 	au FileType python setlocal nocindent
-	au BufNewFile,BufRead *.py setlocal ts=4 sts=4 sw=4 expandtab autoindent textwidth=79
+	au BufNewFile,BufRead *.py setlocal tabstop=4 softtabstop=4 shiftwidth=4 expandtab
+	au BufNewFile,BufRead *.py setlocal autoindent
+	au BufNewFile,BufRead *.py setlocal textwidth=79
 	" }}}
 
 	"------------------+
