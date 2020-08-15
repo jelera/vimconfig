@@ -9,7 +9,7 @@ scriptencoding utf-8
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Sun 02 Aug 2020 03:04:21 PM CDT
+" Last Updated: Fri 14 Aug 2020 07:34:49 PM CDT
 "
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
@@ -120,10 +120,6 @@ Plug 'tpope/vim-repeat' "{{{
 
 Plug 'tpope/vim-projectionist' "{{{
 	" Provides granular project configuration using 'Projections'
-"}}}
-
-Plug 'mhinz/vim-startify' "{{{
-	" Fancy start screen with MRU files
 "}}}
 
 Plug 'Valloric/ListToggle' "{{{
@@ -244,6 +240,10 @@ Plug 'tpope/vim-fugitive' "{{{
 		autocmd FileType gitcommit setl spell
 		autocmd FileType gitcommit setl formatoptions+=tn formatoptions-=l
 		autocmd FileType gitcommit setl colorcolumn=72 textwidth=72
+
+		if executable('par')
+			autocmd FileType gitcommit setl formatprg=par\ -w72
+		endif
 	augroup END
 "}}}
 
@@ -281,6 +281,7 @@ Plug 'dense-analysis/ale' " {{{
 				\ 'jsx' : ['eslint'],
 				\ 'ruby' : ['rubocop']
 	\}
+	" let g:ale_ruby_rubocop_executable = 'bundle'
 	let g:ale_lint_on_save = 1
 	let g:ale_fix_on_save = 1
 "}}}
@@ -360,6 +361,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "{{{
 	" Interactive fuzzy finder
 	Plug 'junegunn/fzf.vim'
 	nnoremap <silent> <C-P> :FZF<Enter>
+	nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
 	" Ripgrep support with FZF
 	nnoremap <silent> \ :Rg<CR>
 	" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
@@ -400,7 +402,7 @@ Plug 'preservim/nerdtree' "{{{
 	Plug 'slim-template/vim-slim'
 	Plug 'vim-ruby/vim-ruby'
 	Plug 'vim-utils/vim-ruby-fold' "{{{
-		let g:ruby_fold_lines_limit = 200
+		" let g:ruby_fold_lines_limit = 200
 	"}}}
 	Plug 'tpope/vim-rake'
 	Plug 'tpope/vim-bundler'
@@ -573,6 +575,8 @@ set completeopt=menu,menuone,preview,noselect,noinsert
 "}}}
 "}}}
 
+nmap <silent> <Leader>rb :below terminal bundle exec rubocop -a %<CR>
+
 "----------------------------------------------------------------------------//
 " FOLDING                                                                   {{{
 "----------------------------------------------------------------------------//
@@ -702,10 +706,6 @@ endif
 hi  Comment  cterm=italic
 hi  gitcommitFirstLine ctermfg=81
 hi  gitcommitSummary ctermfg=81
-
-" if &diff
-" 	colorscheme hybrid-light
-" endif
 " }}}
 
 "------------------------------------+
@@ -1080,7 +1080,7 @@ augroup Filetype Specific         "{{{
 	" Ruby           {{{
 	"------------------+
 	autocmd FileType ruby,eruby setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-	" autocmd FileType ruby,eruby setlocal foldmethod=expr foldlevel=99
+	autocmd FileType ruby,eruby setlocal foldmethod=expr foldlevel=99
 	" }}}
 
 	"------------------+
@@ -1123,6 +1123,7 @@ augroup Filetype Specific         "{{{
 	" SQL            {{{
 	"------------------+
 	au FileType sql setlocal ts=2 sts=2 sw=2 noexpandtab
+	autocmd FileType sql setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 	au BufNewFile,BufRead *.sql set ft=sql foldmethod=marker
 
 augroup END "}}}
