@@ -5,4 +5,5 @@ bundle
 plugged
 .cache/
 spell/
+sessions/
 .directory

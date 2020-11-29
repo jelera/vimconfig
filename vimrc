@@ -9,8 +9,6 @@ scriptencoding utf-8
 "   Maintainer: Jose Elera (https://github.com/jelera)
 "               http://jelera.github.io
 "
-" Last Updated: Fri 14 Aug 2020 07:34:49 PM CDT
-"
 "   Disclaimer: You are welcome to take a look at my .vimrc and take ideas in
 "               how to customize your Vim experience; though I encourage you
 "               to experiment with your own mappings, plugins and configs.
@@ -224,38 +222,9 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} "{{{
 "}}}
 
 "------------------+
-" Text helpers   {{{
+" Linting {{{
 "------------------+
-Plug 'vim-scripts/matchit.zip' "{{{
-	" Extends the existing functionality of the % command, matching also
-	" parentheses, square and curly brackets, as well as conditional statements.
-"}}}
-
-Plug 'tpope/vim-fugitive' "{{{
-	" Provides a nice interface and extra commands for Git
-	augroup Fugitive
-		autocmd!
-		autocmd FileType fugitive setl nonumber
-		autocmd FileType gitcommit setl nonumber
-		autocmd FileType gitcommit setl spell
-		autocmd FileType gitcommit setl formatoptions+=tn formatoptions-=l
-		autocmd FileType gitcommit setl colorcolumn=72 textwidth=72
-
-		if executable('par')
-			autocmd FileType gitcommit setl formatprg=par\ -w72
-		endif
-	augroup END
-"}}}
-
-Plug 'tpope/vim-rhubarb' "{{{
-	" Adds :Gbrowse for opening in Github
-"}}}
-
-Plug 'rhysd/committia.vim' "{{{
-	" Provides a more pleasant editing on Git commit messages
-"}}}
-
-Plug 'dense-analysis/ale' " {{{
+Plug 'dense-analysis/ale' "{{{
 	" Provides real-time async linting
 	let g:ale_sign_column_always = 1
 	let g:ale_sign_error = '❗ '
@@ -285,18 +254,59 @@ Plug 'dense-analysis/ale' " {{{
 	let g:ale_lint_on_save = 1
 	let g:ale_fix_on_save = 1
 "}}}
+"}}}
+
+"------------------+
+" Git {{{
+"------------------+
+Plug 'tpope/vim-fugitive' "{{{
+	" Provides a nice interface and extra commands for Git
+	augroup Fugitive
+		autocmd!
+		autocmd FileType fugitive setl nonumber
+		autocmd FileType gitcommit setl nonumber
+		autocmd FileType gitcommit setl spell
+		autocmd FileType gitcommit setl formatoptions+=tn formatoptions-=l
+		autocmd FileType gitcommit setl colorcolumn=72 textwidth=72
+
+		if executable('par')
+			autocmd FileType gitcommit setl formatprg=par\ -w72
+		endif
+	augroup END
+"}}}
+
+Plug 'tpope/vim-rhubarb' "{{{
+	" Adds :Gbrowse for opening in Github
+"}}}
+
+Plug 'rhysd/committia.vim' "{{{
+	" Provides a more pleasant editing on Git commit messages
+"}}}
+
+Plug 'rhysd/git-messenger.vim'
+Plug 'rhysd/conflict-marker.vim'
+Plug 'knsh14/vim-github-link'
+
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'rhysd/github-complete.vim'
+    augroup config-github-complete
+        autocmd!
+        autocmd FileType gitcommit setl omnifunc=github_complete#complete
+    augroup END
+"}}}
+
+"------------------+
+" Text helpers   {{{
+"------------------+
+Plug 'vim-scripts/matchit.zip' "{{{
+	" Extends the existing functionality of the % command, matching also
+	" parentheses, square and curly brackets, as well as conditional statements.
+"}}}
 
 Plug 'tpope/vim-commentary' "{{{
 	" Adds a new command 'gc' for commenting out lines of text
 "}}}
 
-Plug 'tpope/vim-endwise' "{{{
-	" Wisely add 'end' or (equivalent) in Ruby, Shell Scripting, Elixir, Lua,
-	" Haskell, etc.
-
-	" disable mapping to not break coc.nvim
-	let g:endwise_no_mappings = 1
-"}}}
 
 Plug 'tmux-plugins/vim-tmux-focus-events' "{{{
 	" FocusGained and FocusLost autocommand events are not working in terminal vim. This plugin restores them when using vim inside Tmux.
@@ -318,7 +328,7 @@ Plug 'jiangmiao/auto-pairs' "{{{
 
 Plug 'alvan/vim-closetag' "{{{
 	" Autoclose HTML/XML tags
-	let g:closetag_filetypes = 'html,xhtml,erb,jsx'
+	let g:closetag_filetypes = 'html,xhtml,erb,jsx,html.erb,eruby'
 "}}}
 
 Plug 'valloric/MatchTagAlways' "{{{
@@ -339,15 +349,14 @@ Plug 'janko/vim-test' "{{{
 "}}}
 
 Plug 'rhysd/reply.vim', { 'on': ['Repl', 'ReplAuto'] }
-Plug 'rhysd/git-messenger.vim'
-Plug 'rhysd/conflict-marker.vim'
+
 Plug 'tpope/vim-eunuch'
 "}}}
 
 "------------------+
 " Colorschemes   {{{
 "------------------+
-Plug 'morhetz/gruvbox'
+Plug 'lifepillar/vim-gruvbox8'
 "}}}
 
 "------------------+
@@ -360,11 +369,32 @@ Plug 'liuchengxu/vista.vim' "{{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "{{{
 	" Interactive fuzzy finder
 	Plug 'junegunn/fzf.vim'
-	nnoremap <silent> <C-P> :FZF<Enter>
-	nnoremap <silent> <Leader>ag :Ag <C-R><C-W><CR>
+	nnoremap <silent> <C-P> :GFiles<Enter>
+	nnoremap <silent> <C-B>b :Buffers<Enter>
+	nnoremap <silent> <C-B>h :History<Enter>
+	nnoremap <silent> <Leader>ag :Rg <C-R><C-W><CR>
 	" Ripgrep support with FZF
 	nnoremap <silent> \ :Rg<CR>
+
 	" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+	" let g:fzf_layout = { 'down' : '~40%' }
+
+	" CTRL-A CTRL-Q to select all and build quickfix list
+
+	function! s:build_quickfix_list(lines)
+		call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+		copen
+		cc
+	endfunction
+
+	let g:fzf_action = {
+				\ 'ctrl-q': function('s:build_quickfix_list'),
+				\ 'ctrl-t': 'tab split',
+				\ 'ctrl-x': 'split',
+				\ 'ctrl-v': 'vsplit' }
+
+	let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+	"
 "}}}
 
 Plug 'preservim/nerdtree' "{{{
@@ -377,7 +407,7 @@ Plug 'preservim/nerdtree' "{{{
 	augroup END
 
 	nnoremap <c-t> :NERDTreeToggle<Enter>
-	nnoremap <c-t>f :NERDTreeFind<Enter>
+	nnoremap <silent> <C-B>t :NERDTreeFind<Enter>
 	let NERDTreeQuitOnOpen = 1
 	let NERDTreeMinimalUI = 1
 	let NERDTreeDirArrows = 1
@@ -407,17 +437,24 @@ Plug 'preservim/nerdtree' "{{{
 	Plug 'tpope/vim-rake'
 	Plug 'tpope/vim-bundler'
 	Plug 'tpope/vim-rails'
+	Plug 'tpope/vim-endwise' "{{{
+		" Wisely add 'end' or (equivalent) in Ruby, Shell Scripting, Elixir, Lua,
+		" Haskell, etc.
+
+		" disable mapping to not break coc.nvim
+		let g:endwise_no_mappings = 1
+		"}}}
 	"}}}
 
 	" Markdown ---------------{{{
 	Plug 'tpope/vim-markdown'
 	Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+	"}}}
 
 	" Python ---------------{{{
 	Plug 'vim-python/python-syntax'
 		let g:python_highlight_all = 1
 	"}}}
-
 ""}}}
 
 
@@ -432,6 +469,9 @@ filetype plugin indent on " Required!
 "}}}
 
 "}}}
+
+
+
 
 "}}}
 "}}}
@@ -480,6 +520,11 @@ set history=1000
 set undolevels=1000
 set confirm
 set shiftround
+
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
+
 "}}}
 
 "------------------------------------+
@@ -574,8 +619,6 @@ set completeopt=menu,menuone,preview,noselect,noinsert
 
 "}}}
 "}}}
-
-nmap <silent> <Leader>rb :below terminal bundle exec rubocop -a %<CR>
 
 "----------------------------------------------------------------------------//
 " FOLDING                                                                   {{{
@@ -679,8 +722,8 @@ endfunction "}}}
 "------------------------------------+
 set termguicolors
 
-let g:gruvbox_contrast_dark = 'hard'
-colorscheme gruvbox
+" let g:gruvbox_contrast_dark = 'hard'
+colorscheme gruvbox8_hard
 
 set background=dark
 
@@ -706,6 +749,7 @@ endif
 hi  Comment  cterm=italic
 hi  gitcommitFirstLine ctermfg=81
 hi  gitcommitSummary ctermfg=81
+hi  RubyKeywordAsMethod ctermfg=44
 " }}}
 
 "------------------------------------+
