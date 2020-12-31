@@ -196,6 +196,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} "{{{
 	nmap <silent> gd <Plug>(coc-definition)
 	nmap <silent> gr <Plug>(coc-references)
 	nmap <silent> gm <Plug>(coc-implementation)
+	nmap <silent> gy <Plug>(coc-type-definition)
 	"}}}
 
 	" Use K to show documentation in preview window.{{{
@@ -238,6 +239,7 @@ Plug 'dense-analysis/ale' "{{{
 				\ '*': ['remove_trailing_lines', 'trim_whitespace'],
 				\ 'javascript': ['prettier', 'eslint'],
 				\ 'javascript.jsx': ['prettier', 'eslint'],
+				\ 'typescript': ['tsserver'],
 				\ 'html': ['prettier'],
 				\ 'css': ['prettier'],
 				\ 'ruby': ['rubocop']
@@ -248,6 +250,7 @@ Plug 'dense-analysis/ale' "{{{
 	let g:ale_linters = {
 				\ 'javascript': ['eslint'],
 				\ 'jsx' : ['eslint'],
+				\ 'typescript': ['tsserver'],
 				\ 'ruby' : ['rubocop']
 	\}
 	" let g:ale_ruby_rubocop_executable = 'bundle'
@@ -418,7 +421,9 @@ Plug 'preservim/nerdtree' "{{{
 "------------------+
 	" JavaScript, JSON, ES6, JSX -------------{{{
 	Plug 'git@github.com:jelera/vim-javascript-syntax.git', { 'for': 'javascript' }
-	Plug 'maxmellon/vim-jsx-pretty'
+	Plug 'leafgarland/typescript-vim' " TypeScript syntax
+	Plug 'maxmellon/vim-jsx-pretty'   " JS and JSX syntax
+	Plug 'jparise/vim-graphql'        " GraphQL syntax
 	"}}}
 
 	" HTML/XML/CSS -----------{{{
@@ -1109,6 +1114,12 @@ augroup Filetype Specific         "{{{
 	" JavaScript     {{{
 	"------------------+
 	autocmd FileType javascript,javascript.jsx setlocal tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab
+	" }}}
+
+	"------------------+
+	" TypeScript     {{{
+	"------------------+
+	autocmd FileType typescript setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 	" }}}
 
 	"------------------+
