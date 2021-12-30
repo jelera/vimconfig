@@ -239,21 +239,21 @@ Plug 'dense-analysis/ale' "{{{
 				\ '*': ['remove_trailing_lines', 'trim_whitespace'],
 				\ 'javascript': ['prettier', 'eslint'],
 				\ 'javascript.jsx': ['prettier', 'eslint'],
-				\ 'typescript': ['tsserver'],
 				\ 'html': ['prettier'],
 				\ 'css': ['prettier'],
 				\ 'ruby': ['rubocop']
 	\}
+				" \ 'typescript': ['ng lint --fix', 'prettier', 'eslint'],
 
 	let g:ale_linter_aliases = {'jsx': ['css', 'javascript']}
 
 	let g:ale_linters = {
 				\ 'javascript': ['eslint'],
 				\ 'jsx' : ['eslint'],
-				\ 'typescript': ['tsserver'],
 				\ 'ruby' : ['rubocop']
 	\}
-	" let g:ale_ruby_rubocop_executable = 'bundle'
+				" \ 'typescript': ['ng lint', 'tsserver', 'eslint'],
+	let g:ale_ruby_rubocop_executable = 'bundle'
 	let g:ale_lint_on_save = 1
 	let g:ale_fix_on_save = 1
 "}}}
@@ -344,7 +344,8 @@ Plug 'valloric/MatchTagAlways' "{{{
 
 Plug 'janko/vim-test' "{{{
 	let test#strategy = 'vimterminal'
-	let test#ruby#rspec#executable = 'bin/rspec'
+	" let test#ruby#rspec#executable = 'bin/rspec'
+	let test#ruby#rspec#executable = 'bundle exec rspec'
 	nnoremap <silent> <leader>tf :TestFile<CR>
 	nnoremap <silent> <leader>tl :TestLast<CR>
 	nnoremap <silent> <leader>tn :w<CR>:TestNearest<CR>
@@ -943,6 +944,9 @@ augroup Spelling plain text
 	au FileType mail,text au BufEnter,BufWinEnter <buffer> setlocal spell
 augroup END
 "}}}
+
+command Q q
+
 
 "}}}
 
