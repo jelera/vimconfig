@@ -241,7 +241,8 @@ Plug 'dense-analysis/ale' "{{{
 				\ 'javascript.jsx': ['prettier', 'eslint'],
 				\ 'html': ['prettier'],
 				\ 'css': ['prettier'],
-				\ 'ruby': ['rubocop']
+				\ 'ruby': ['standardrb'],
+				\ 'eruby': ['erblint']
 	\}
 				" \ 'typescript': ['ng lint --fix', 'prettier', 'eslint'],
 
@@ -250,7 +251,8 @@ Plug 'dense-analysis/ale' "{{{
 	let g:ale_linters = {
 				\ 'javascript': ['eslint'],
 				\ 'jsx' : ['eslint'],
-				\ 'ruby' : ['rubocop']
+				\ 'scss': ['stylelint'],
+				\ 'ruby': ['standardrb']
 	\}
 				" \ 'typescript': ['ng lint', 'tsserver', 'eslint'],
 	let g:ale_ruby_rubocop_executable = 'bundle'
@@ -344,8 +346,8 @@ Plug 'valloric/MatchTagAlways' "{{{
 
 Plug 'janko/vim-test' "{{{
 	let test#strategy = 'vimterminal'
-	" let test#ruby#rspec#executable = 'bin/rspec'
-	let test#ruby#rspec#executable = 'bundle exec rspec'
+	let test#ruby#rspec#executable = 'bundle exec spring rspec'
+	" let test#ruby#rspec#executable = 'bundle exec rspec --format documentation'
 	nnoremap <silent> <leader>tf :TestFile<CR>
 	nnoremap <silent> <leader>tl :TestLast<CR>
 	nnoremap <silent> <leader>tn :w<CR>:TestNearest<CR>
@@ -454,7 +456,11 @@ Plug 'preservim/nerdtree' "{{{
 
 	" Markdown ---------------{{{
 	Plug 'tpope/vim-markdown'
-	Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+	Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  } "{{{
+		let g:mkdp_auto_start = 1
+		let g:mkdp_theme = 'light'
+	"}}}
+
 	"}}}
 
 	" Python ---------------{{{
@@ -1014,12 +1020,12 @@ augroup Code Comments             "{{{
 "------------------------------------+
 	" Horizontal Rule (78 char long)
 	autocmd FileType vim                           map <leader>hr 0i""---------------------------------------------------------------------------//<ESC>
-	autocmd FileType javascript,php,c,cpp,css      map <leader>hr 0i/**-------------------------------------------------------------------------**/<ESC>
+	autocmd FileType javascript,php,c,cpp,css,scss      map <leader>hr 0i/**-------------------------------------------------------------------------**/<ESC>
 	autocmd FileType python,perl,ruby,sh,zsh,conf  map <leader>hr 0i##---------------------------------------------------------------------------//<ESC>
 	" Comment Banners (adds 5 spaces at each end)
 	autocmd FileType vim                           map <leader>cb I"     <ESC>A     "<ESC>yyp0lv$hhr-yykPjj
 	autocmd FileType python,perl,ruby,sh,zsh,conf  map <leader>cb I#     <ESC>A     #<ESC>yyp0lv$hhr-yykPjj
-	autocmd FileType javascript,php,c,cpp,css      map <leader>cb I/*     <ESC>A     */<ESC>yyp0llv$r-$hc$*/<ESC>yykPjj
+	autocmd FileType javascript,php,c,cpp,css,scss      map <leader>cb I/*     <ESC>A     */<ESC>yyp0llv$r-$hc$*/<ESC>yykPjj
 
 
 augroup END "}}}
@@ -1105,6 +1111,7 @@ augroup Filetype Specific         "{{{
 	autocmd FileType markdown setlocal autoindent
 	autocmd FileType markdown setlocal textwidth=80
 	autocmd FileType markdown setlocal formatoptions=tcroqn2 comments=n:>
+	autocmd FileType markdown setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 	" }}}
 
 	"----------------------+
@@ -1127,19 +1134,21 @@ augroup Filetype Specific         "{{{
 	" }}}
 
 	"------------------+
-	" CSS            {{{
+	" CSS/SCSS            {{{
 	"------------------+
-	autocmd FileType css setlocal smartindent
-	autocmd FileType css setlocal tabstop=2 shiftwidth=2 noexpandtab
+	autocmd FileType css,scss setlocal smartindent
+	autocmd FileType css,scss setlocal tabstop=2 shiftwidth=2 expandtab
 	autocmd FileType css setlocal equalprg=prettier\ --parser\ css\ --stdin\ --tab-width\ 2
-	autocmd FileType css noremap <leader>css %s/{\_.\{-}}/\=substitute(submatch(0), '\n', '', 'g')/
+	autocmd FileType css,scss noremap <leader>css %s/{\_.\{-}}/\=substitute(submatch(0), '\n', '', 'g')/
+	autocmd FileType scss setl iskeyword+=@-@
 	" }}}
 
 	"------------------+
 	" Ruby           {{{
 	"------------------+
 	autocmd FileType ruby,eruby setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-	autocmd FileType ruby,eruby setlocal foldmethod=expr foldlevel=99
+	autocmd FileType ruby setlocal foldmethod=expr foldlevel=99
+	" autocmd FileType ruby,eruby setlocal foldmethod=expr foldlevel=99
 	" }}}
 
 	"------------------+
@@ -1155,6 +1164,14 @@ augroup Filetype Specific         "{{{
 	autocmd BufNewFile,BufRead *.slim setlocal filetype=slim
 	autocmd FileType slim setlocal foldmethod=indent
 	" }}}
+	"
+
+	"------------------+
+	" erb           {{{
+	"------------------+
+	autocmd FileType eruby setlocal foldmethod=indent
+	" }}}
+	"
 
 	"------------------+
 	" Python         {{{
@@ -1182,8 +1199,9 @@ augroup Filetype Specific         "{{{
 	" SQL            {{{
 	"------------------+
 	au FileType sql setlocal ts=2 sts=2 sw=2 noexpandtab
-	autocmd FileType sql setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+	" au FileType sql setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 	au BufNewFile,BufRead *.sql set ft=sql foldmethod=marker
+	au FileType sql setl cms=--%s
 
 augroup END "}}}
 "}}}
