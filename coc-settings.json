@@ -1,4 +1,6 @@
 {
+	"diagnostic.enable": false,
 	"diagnostic.displayByAle": true,
-	"codeLens.enable": true
+	"codeLens.enable": true,
+	"solargraph.commandPath": "/Users/jelera/.asdf/shims/solargraph"
 }

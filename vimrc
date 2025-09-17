@@ -86,8 +86,11 @@ Plug 'vim-airline/vim-airline-themes'
 				\ }
 	let g:airline_powerline_fonts = 1
 	let g:airline_skip_empty_sections = 1
-	let g:airline#extensions#branch#format = 2
+  " let g:airline#extensions#branch#enabled = 1
+  let g:airline#extensions#branch#displayed_head_limit = 10
+  let g:airline#extensions#branch#format = 1
 	let g:airline_theme = 'luna'
+	let g:ale_disable_lsp = 1
 	let g:airline#extensions#ale#enabled = 1
 	let airline#extensions#ale#error_symbol = '❗ '
 	let airline#extensions#ale#warning_symbol = '⚠️  '
@@ -120,12 +123,12 @@ Plug 'tpope/vim-projectionist' "{{{
 	" Provides granular project configuration using 'Projections'
 "}}}
 
-Plug 'Valloric/ListToggle' "{{{
-	" Toggles the display of the QuickFix and the Location list
-	" Mappings:
-	" <leader>l for toggling the Location List
-	" <leader>q for toggling the QuickFix
-"}}}
+"Plug 'Valloric/ListToggle' "{{{
+"	" Toggles the display of the QuickFix and the Location list
+"	" Mappings:
+"	" <leader>l for toggling the Location List
+"	" <leader>q for toggling the QuickFix
+""}}}
 "}}}
 
 Plug 'SirVer/ultisnips' "{{{
@@ -148,6 +151,18 @@ Plug 'epilande/vim-react-snippets' "{{{
 	" Snippets for React
 "}}}
 
+Plug 'github/copilot.vim' "{{{
+	" Copilot
+"}}}
+
+
+Plug 'DanBradbury/copilot-chat.vim'
+
+
+Plug 'hashivim/vim-terraform' "{{{
+  " terraform
+"}}}
+
 
 "------------------+
 " Autocompletion {{{
@@ -158,67 +173,154 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'} "{{{
 	set shortmess+=c
 	set signcolumn=yes
 
-	" Tab for completion and snippets {{{
-	" Use tab for trigger completion with characters ahead and navigate.
-	" Use command ':verbose imap <tab>' to make sure tab is not mapped by other
-	" plugin.
-	inoremap <silent><expr> <TAB>
-				\ pumvisible() ? coc#_select_confirm() :
-				\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-				\ <SID>check_back_space() ? "\<TAB>" :
-				\ coc#refresh()
+	" Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
 
-	function! s:check_back_space() abort
-		let col = col('.') - 1
-		return !col || getline('.')[col - 1]  =~# '\s'
-	endfunction
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
 
-	let g:coc_snippet_next = '<tab>'
-	let g:coc_snippet_prev = '<S-Tab>'
-	"}}}
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+set signcolumn=yes
 
-	"Use <c-space> to trigger completion.{{{
-	inoremap <silent><expr> <c-space> coc#refresh()
-	"}}}
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-	" Use <cr> to confirm completion {{{
-	" `<C-g>u` means break undo chain at current
-	" position. Coc only does snippet and additional edit on confirm.
-	" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
-	if exists('*complete_info')
-		inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-	else
-		inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-	endif
-	"}}}
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-	" GoTo code navigation. {{{
-	nmap <silent> gd <Plug>(coc-definition)
-	nmap <silent> gr <Plug>(coc-references)
-	nmap <silent> gm <Plug>(coc-implementation)
-	nmap <silent> gy <Plug>(coc-type-definition)
-	"}}}
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-	" Use K to show documentation in preview window.{{{
-	nnoremap <silent> K :call <SID>show_documentation()<CR>
-	function! s:show_documentation()
-		if (index(['vim','help'], &filetype) >= 0)
-			execute 'h '.expand('<cword>')
-		else
-			call CocAction('doHover')
-		endif
-	endfunction
-	"}}}
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
-	" " Symbol renaming.
-	" nmap <leader>rn <Plug>(coc-rename)
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-	" " Formatting selected code.
-	" xmap <leader>f  <Plug>(coc-format-selected)
-	" nmap <leader>f  <Plug>(coc-format-selected)
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call ShowDocumentation()<CR>
 
-	" let g:coc_global_extensions = ['coc-solargraph']
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Run the Code Lens action on the current line.
+nmap <leader>cl  <Plug>(coc-codelens-action)
+
+" Map function and class text objects
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocActionAsync('format')
+
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 "}}}
 "}}}
 
@@ -255,9 +357,14 @@ Plug 'dense-analysis/ale' "{{{
 				\ 'ruby': ['standardrb']
 	\}
 				" \ 'typescript': ['ng lint', 'tsserver', 'eslint'],
-	let g:ale_ruby_rubocop_executable = 'bundle'
+	" let g:ale_ruby_rubocop_executable = 'bundle'
+  " let g:ale_ruby_standardrb_executable = 'bundle'
+  " 
+  let g:ale_ruby_standardrb_executable = "bundle"
+  let g:ale_ruby_standardrb_options = "--fix"
 	let g:ale_lint_on_save = 1
 	let g:ale_fix_on_save = 1
+
 "}}}
 "}}}
 
@@ -346,7 +453,8 @@ Plug 'valloric/MatchTagAlways' "{{{
 
 Plug 'janko/vim-test' "{{{
 	let test#strategy = 'vimterminal'
-	let test#ruby#rspec#executable = 'bundle exec spring rspec'
+	let test#ruby#rspec#executable = 'bundle exec rspec'
+	let test##rspec#executable = 'bundle exec rspec'
 	" let test#ruby#rspec#executable = 'bundle exec rspec --format documentation'
 	nnoremap <silent> <leader>tf :TestFile<CR>
 	nnoremap <silent> <leader>tl :TestLast<CR>
@@ -375,12 +483,34 @@ Plug 'liuchengxu/vista.vim' "{{{
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "{{{
 	" Interactive fuzzy finder
 	Plug 'junegunn/fzf.vim'
-	nnoremap <silent> <C-P> :GFiles<Enter>
-	nnoremap <silent> <C-B>b :Buffers<Enter>
-	nnoremap <silent> <C-B>h :History<Enter>
-	nnoremap <silent> <Leader>ag :Rg <C-R><C-W><CR>
-	" Ripgrep support with FZF
-	nnoremap <silent> \ :Rg<CR>
+	" nnoremap <silent> <C-P> :GFiles<Enter>
+	" nnoremap <silent> <C-B>b :Buffers<Enter>
+	" nnoremap <silent> <C-B>h :History<Enter>
+	" nnoremap <silent> <Leader>ag :Rg <C-R><C-W><CR>
+	" " Ripgrep support with FZF
+	" nnoremap <silent> \ :Rg<CR>
+  " Fuzzy finder
+nnoremap <C-p>g :Files<CR>
+" or for fzf.vim: nnoremap <C-p>g :GFiles<CR>
+
+" Search history
+nnoremap <C-p>h :History<CR>
+
+" Project finder (fuzzy finder in project)
+nnoremap <C-p>p :GFiles<CR>
+" or for telescope: nnoremap <C-p>p :Telescope find_files<CR>
+
+" Buffer list (opened buffers/tabs)
+nnoremap <C-p>b :Buffers<CR>
+" or built-in: nnoremap <C-p>b :ls<CR>:b<Space>
+
+" Commit search
+nnoremap <C-p>c :Commits<CR>
+" or for fugitive: nnoremap <C-p>c :GLog<CR>
+
+" Command palette
+nnoremap <C-p>a :Commands<CR>
+" or built-in: nnoremap <C-p>a :<C-f>
 
 	" let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 	" let g:fzf_layout = { 'down' : '~40%' }
@@ -443,7 +573,7 @@ Plug 'preservim/nerdtree' "{{{
 		" let g:ruby_fold_lines_limit = 200
 	"}}}
 	Plug 'tpope/vim-rake'
-	Plug 'tpope/vim-bundler'
+	" Plug 'tpope/vim-bundler'
 	Plug 'tpope/vim-rails'
 	Plug 'tpope/vim-endwise' "{{{
 		" Wisely add 'end' or (equivalent) in Ruby, Shell Scripting, Elixir, Lua,
@@ -457,9 +587,9 @@ Plug 'preservim/nerdtree' "{{{
 	" Markdown ---------------{{{
 	Plug 'tpope/vim-markdown'
 	Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  } "{{{
-		let g:mkdp_auto_start = 1
+	"	let g:mkdp_auto_start = 1
 		let g:mkdp_theme = 'light'
-	"}}}
+	""}}}
 
 	"}}}
 
@@ -854,7 +984,7 @@ set smartindent
 "------------------------------------+
 set shiftwidth=2
 set tabstop=2
-set noexpandtab " Use tabs instead of spaces
+set expandtab
 set smarttab
 "}}}
 
@@ -1109,8 +1239,8 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	autocmd FileType markdown setlocal spell
 	autocmd FileType markdown setlocal autoindent
-	autocmd FileType markdown setlocal textwidth=80
-	autocmd FileType markdown setlocal formatoptions=tcroqn2 comments=n:>
+	" autocmd FileType markdown setlocal textwidth=80
+	" autocmd FileType markdown setlocal formatoptions=tcroqn2 comments=n:>
 	autocmd FileType markdown setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 	" }}}
 
@@ -1118,14 +1248,17 @@ augroup Filetype Specific         "{{{
 	" HTML/XHTML/XML     {{{
 	"----------------------+
 	autocmd FileType html,xhtml,xml setlocal textwidth=0
-	autocmd FileType html,xhtml,xml setlocal tabstop=3 shiftwidth=3 noexpandtab
+	autocmd FileType html,xhtml,xml setlocal tabstop=3 shiftwidth=3 expandtab
 	" }}}
 
 	"------------------+
 	" JavaScript     {{{
 	"------------------+
-	autocmd FileType javascript,javascript.jsx setlocal tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab
-	" }}}
+	autocmd FileType javascript,javascript.jsx setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+	autocmd FileType json,jsonc setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+  " Disable quote concealing in JSON files
+  let g:vim_json_conceal=0
+  " }}}
 
 	"------------------+
 	" TypeScript     {{{
@@ -1148,7 +1281,9 @@ augroup Filetype Specific         "{{{
 	"------------------+
 	autocmd FileType ruby,eruby setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
 	autocmd FileType ruby setlocal foldmethod=expr foldlevel=99
-	" autocmd FileType ruby,eruby setlocal foldmethod=expr foldlevel=99
+	autocmd FileType ruby,eruby setlocal foldmethod=expr foldlevel=99
+
+	nnoremap <silent> <leader>l :!bundle\ exec\ standardrb\ --fix\ %<Enter>
 	" }}}
 
 	"------------------+
